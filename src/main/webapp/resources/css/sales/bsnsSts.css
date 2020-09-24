@@ -1,0 +1,228 @@
+@charset "UTF-8";
+
+.head1 , .head2 {
+	display: inline-block;
+	text-align: center;
+	font-size: 20px;
+	width: 100%;
+	height: 5%;
+	font-weight: bold;
+}
+
+.bs {
+	width: 100%;
+	border-collapse: collapse;
+	text-align: center;
+	vertical-align: center;
+	font-size: 11pt;
+
+}
+
+.bs thead {
+	/* background-color: #004078; */
+	background: linear-gradient(#004B8D, #00305A);
+	color: white;
+
+}
+
+.bs tr {
+	height: 40px;
+}
+.bs td {
+	border-bottom: 1px solid lightgray;
+	cursor: pointer;
+}
+.bs tbody tr:hover {
+	background-color: #dae2f1;	
+}
+
+.bs td:nth-child(1) {
+	color: #8e8e8e;
+	font-size: 9pt;
+	min-width: 50px;
+	max-width: 50px;
+}
+
+.bs td:nth-child(1):hover {
+	text-decoration: underline;
+}
+.bs td:nth-child(2) {
+ 	min-width:30px;
+ 	text-align:center;
+}
+
+
+
+.bs td:nth-child(3) {
+	min-width:30px;
+}
+
+.bs td:nth-child(4) {
+	min-width: 30px;
+}
+
+.bs td:nth-child(5) {
+	min-width: 30px;
+}
+.bs td:nth-child(6) {
+	min-width: 30px;
+}
+.bs td:nth-child(7) {
+	min-width: 150px;
+}
+
+/* paging */
+
+.paging {
+	border-bottom: 0px !important;
+	font-size: 0pt;
+	text-align: center !important;
+	margin-top:10px;
+}
+
+.pagingD {
+/* 	font-famil: Times New Roman;
+ */	font-family: Georgia;
+	font-size:8.5pt;
+/* 	font-weight:bold;	
+ */	vertical-align:top;
+	display: inline-block; 
+	border-left: 1px solid lightgray;
+	border-top: 1px solid lightgray;
+	border-bottom: 1px solid lightgray;
+	width:18px;
+	height:18px;
+	padding-top:1px;
+	padding-left:1px;
+	color: #868686;
+	cursor: pointer;
+}
+
+.pagingD:hover {
+ 	background-color: #e2dddd;	
+	
+}
+
+#first{
+	background-image: url("../../images/common/arrow1_first_gray.png");
+	background-repeat: no-repeat;
+	background-size: 10px 10px;
+ 	background-position: 4px 4px;
+}
+
+#before{
+	background-image: url("../../images/common/arrow2_before_gray.png");
+	background-repeat: no-repeat;
+	background-size: 6px 10px;
+ 	background-position: 6px 4px;	
+}
+
+#next {
+	background-image: url("../../images/common/arrow3_next_gray.png");
+	background-repeat: no-repeat;
+	background-size: 6px 10px;
+ 	background-position: 7px 4px;		
+}
+
+#last{
+	border-right: 1px solid lightgray;
+	background-image: url("../../images/common/arrow4_last_gray.png");
+	background-repeat: no-repeat;
+	background-size: 10px 10px;
+ 	background-position: 5px 4px;	
+}
+/* 단계별 성공활률  */
+/* .bs2 {
+	width: 100%;
+	border-collapse: collapse;
+	text-align: center;
+	vertical-align: center;
+	font-size: 11pt;
+
+}
+
+.bs2 thead {
+	background-color: #004078;
+	background: linear-gradient(#004B8D, #00305A);
+	color: white;
+
+}
+
+.bs2 tr {
+	height: 40px;
+}
+.bs2 td {
+	border-bottom: 1px solid lightgray;
+	
+}
+
+.bs2 td:nth-child(1) {
+	font-size: 12pt;
+	min-width: 200px;
+	max-width: 300px;
+}
+
+.bs2 td:nth-child(2) {
+ 	min-width:200px;
+ 	max-width:500px;
+	text-align:left;
+}
+
+.기회t:hover, .제안t:hover, .협상t:hover, .수주t:hover {
+	cursor: pointer;
+	color: red;
+}
+.기회  {
+	background-color: blue;
+}
+
+.제안 {
+	background-color: purple;
+}
+
+.협상 {
+	background-color: red;
+}
+
+.수주 {
+	background-color: green;
+} */
+
+.highcharts-figure, .highcharts-data-table table {
+    min-width: 310px; 
+    max-width: 100%;
+    margin: 1em auto;
+}
+
+#container {
+    height: 400px;
+}
+
+.highcharts-data-table table {
+	font-family: Verdana, sans-serif;
+	border-collapse: collapse;
+	border: 1px solid #EBEBEB;
+	margin: 10px auto;
+	text-align: center;
+	width: 100%;
+	max-width: 500px;
+}
+.highcharts-data-table caption {
+    padding: 1em 0;
+    font-size: 1.2em;
+    color: #555;
+}
+.highcharts-data-table th {
+	font-weight: 600;
+    padding: 0.5em;
+}
+.highcharts-data-table td, .highcharts-data-table th, .highcharts-data-table caption {
+    padding: 0.5em;
+}
+.highcharts-data-table thead tr, .highcharts-data-table tr:nth-child(even) {
+    background: #f8f8f8;
+}
+.highcharts-data-table tr:hover {
+    background: #f1f7ff;
+}
+

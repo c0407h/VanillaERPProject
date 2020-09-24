@@ -1,0 +1,129 @@
+@charset "UTF-8";
+
+ td{
+	cursor: pointer;
+	text-align:center;
+	border-bottom: 1px solid lightgray;
+	
+}
+.option{
+		text-align:left;
+		width: 1150px;
+		vertical-align:top;
+		font-size: 16px;
+}
+ thead, .blue {
+	/* background-color: #004078; */
+	background: linear-gradient(#004B8D, #00305A);
+	color: white;
+	height: 45px;
+
+}
+td:hover{/*마우스가 올라왔을때만*/
+ 		background-color: /* #eeb095 */;
+ 		font-weight:bold;
+}
+.text{
+	height: 30px;
+	vertical-align: top;
+	width: 300px;
+}
+
+.calendar2, .pagingD {
+    width: 20px;
+    height: 20px;
+}
+thead, .blue {
+    /* background-color: #004078; */
+   /*  background: linear-gradient(#004B8D, #00305A); */
+    color: white;
+    height: 45px;
+}
+td {
+    cursor: pointer;
+    text-align: center;
+    border-bottom: 1px solid lightgray;
+}
+.t tbody tr:hover {
+	background-color: #dae2f1;	
+	text-decoration: underline;
+	font-weight: bold;
+}
+.paging {
+    border-bottom: 0px !important;
+    font-size: 0pt;
+    text-align: center !important;
+    margin-top: 10px;
+}
+.board{
+	margin-top: 30px;
+}
+.calendar2, .pagingD {
+    width: 20px;
+    height: 20px;
+}
+.text1{
+	width : 230px;
+	height : 30px;
+}
+.text2{
+	with :200px;
+	height : 30px;
+}
+.text3{
+	width : 89%;
+	height : 30px;
+}
+.text4{
+	width : 650px;
+	height : 100px;
+}
+.popup {
+    background-color: white;
+    width: 900px;
+    height: 900px;
+    position: absolute;
+    top: calc(50% - 300px);
+    left: calc(50% - 300px);
+    box-shadow: 1px 0px 4px 0px rgba(0, 0, 0, 0.8);
+    z-index: 100;
+}
+thead, .blue {
+    background-color: #004078;
+    background: linear-gradient(#004B8D, #00305A);
+    /* color: white; */
+    /* height: 45px; */
+}
+td {
+    cursor: pointer;
+    text-align: center;
+    border-bottom: 1px solid lightgray;
+}
+thead{
+	color: white;
+}
+.table2{
+	margin-top: 50px;
+}
+.i,.j{
+	vertical-align:top;
+	display: inline-block;
+	width: 49%; 
+}
+
+.search_date_txt {
+	height: 27px;
+	line-height: 1.7;
+	font-size: 12pt;
+	margin-left: 10px;
+	margin-right: 10px;
+}
+
+.search_date {
+	height: 27px;
+    vertical-align: top;
+    border: 1px solid lightgray;
+    color: #515151;
+    outline-color: #d5e4f1;
+}
+

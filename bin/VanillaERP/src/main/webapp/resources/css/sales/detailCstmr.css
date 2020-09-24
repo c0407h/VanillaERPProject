@@ -1,0 +1,188 @@
+@charset "UTF-8";
+
+/* 수정 */
+.updatecstmr{
+text-align:center;
+font-size: 17px;
+font-weight: bold;
+border-collapse: collapse;
+}
+.updatecstmr th{
+	background: linear-gradient(#004B8D, #00305A);
+	color: white;
+	width: 100px;
+	text-shadow: 1px 1px 2px grey;
+}
+
+.select_cstmrgrade{
+width:158px; 
+height:46px; 
+	font-size: 17px;
+}
+.inputtxt{
+width:150px; 
+height:38px; 
+	font-size: 17px;
+}
+.inputtxt2{
+width:110px; 
+height:38px; 
+font-size: 17px;
+}
+.select_grade{
+width:158px; 
+height:46px; 
+	font-size: 17px;
+}
+.select_type{
+width:158px; 
+height:46px; 
+	font-size: 17px;
+}
+
+.inputaddtxt{
+	height: 38px;
+	font-size: 17px;
+	width:100%;
+	max-width:440px;
+}
+.search_emply{
+		height:42px;
+	width:40px;
+	font-size:10px;
+	padding: 0px;
+}
+.searchEmply{
+	width: 100%;
+	border-collapse: collapse;
+	text-align: center;
+	vertical-align: middle;
+	font-size: 11pt;
+	left:100px;
+	margin-bottom: 10px;
+	
+}
+.searchEmply th {
+	background: linear-gradient(#004B8D, #00305A);
+	color: white;
+	font-size: 13px;
+	text-shadow: 1px 1px 2px grey;
+}
+.searchEmply td {
+	border-bottom: 1px solid lightgray;
+	cursor: pointer;
+}
+.searchEmply tbody tr:hover {
+	background-color: #dae2f1;	
+}
+
+
+/* 상세 */
+
+.detailcstmr{
+	border-collapse: collapse;
+	text-align: center;
+	vertical-align: middle;
+	font-size: 15pt;
+	font-weight: bold;
+	width: 100%
+}
+.empty{
+border-bottom: 1px solid gray;
+height: 8px;
+}
+.detailcstmr th{
+	background: linear-gradient(#004B8D, #00305A);
+	color: white;
+	text-shadow: 1px 1px 2px grey;
+}
+
+
+.BackBtn, .ChangeBtn, .DelBtn {
+	vertical-align: top;
+	height:29px;
+	width:75px;
+	border: 1px solid lightgray;
+ 	margin-bottom:10px;
+ 	color:#515151;
+ 	outline-color: #d5e4f1;
+	cursor: pointer;
+	float: right;
+	margin-left: 5px;
+}
+.Btnarea{
+	width: 760px;
+	margin: auto;
+	height: 30px;
+}
+.tbl2{
+	width: 760px;
+	margin: auto;
+	height: 600px;
+	color: #515151;	
+}
+
+
+/* 담당자 검색 paging */
+
+.searchpaging {
+	border-bottom: 0px !important;
+	font-size: 0pt;
+	text-align: center !important;
+	margin-top:10px;
+}
+
+
+.searchpagingD {
+/* 	font-famil: Times New Roman;
+ */	font-famil: Georgia;
+	font-size:8.5pt;
+/* 	font-weight:bold;	
+ */	vertical-align:top;
+	display: inline-block; 
+	border-left: 1px solid lightgray;
+	border-top: 1px solid lightgray;
+	border-bottom: 1px solid lightgray;
+	width:18px;
+	height:18px;
+	padding-top:1px;
+	padding-left:1px;
+	color: #868686;
+	cursor: pointer;
+}
+
+.searchpagingD:hover {
+ 	background-color: #e2dddd;	
+	
+}
+
+#first2{
+	background-image: url("../../images/common/arrow1_first_gray.png");
+	background-repeat: no-repeat;
+	background-size: 10px 10px;
+ 	background-position: 4px 4px;
+}
+
+#before2{
+	background-image: url("../../images/common/arrow2_before_gray.png");
+	background-repeat: no-repeat;
+	background-size: 6px 10px;
+ 	background-position: 6px 4px;	
+}
+
+#next2{
+	background-image: url("../../images/common/arrow3_next_gray.png");
+	background-repeat: no-repeat;
+	background-size: 6px 10px;
+ 	background-position: 7px 4px;		
+}
+
+#last2{
+	border-right: 1px solid lightgray;
+	background-image: url("../../images/common/arrow4_last_gray.png");
+	background-repeat: no-repeat;
+	background-size: 10px 10px;
+ 	background-position: 5px 4px;	
+}
+
+

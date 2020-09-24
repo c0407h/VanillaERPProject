@@ -1,0 +1,493 @@
+@charset "UTF-8";
+.cal {
+	width: calc(100% - 60px);
+	height: calc(100% - 60px);
+	font-size: 12pt;
+}
+
+.cal_color1 {
+	background-color: green;
+	width: 120px;
+	height: 20px;
+}
+
+.cal_color2 {
+	background-color: blue;
+	width: 120px;
+	height: 20px;
+}
+
+.cal_color3 {
+	background-color: red;
+	width: 120px;
+	height: 20px;
+}
+
+.cal_list {
+	display: inline-block;
+	vertical-align: top;
+	width: 35%;
+	height: 800px;
+}
+
+.calimg {
+	text-align: left;
+}
+
+.addimg {
+	text-align: right;
+}
+
+.listtable {
+	width: 100%;
+	border: 1px solid black;
+	border-collapse: collapse;
+	vertical-align : top;
+	text-align: center;
+	vertical-align: center;
+	font-size: 14pt;
+	background: linear-gradient(#004B8D, #00305A);
+	color: white;
+	
+}
+
+.listtable td:nth-child(2) {
+	min-width: 70px;
+	max-width: 100px;
+}
+
+.listtable td:nth-child(3) {
+	min-width: 150px;
+}
+
+.listtable td:nth-child(4) {
+	min-width: 150px;
+}
+
+.cal1 {
+	position: relative;
+	height: 650px;
+	background-size: 100% 100%;
+	background-repeat: no-repeat;
+}
+
+.colorname2 {
+	width: 300px;
+    height: 30px;
+    margin: 0 auto;
+    margin-top: 25px;
+}
+
+.colorname2 th {
+	font-size: 12pt;
+	width: 300px;
+	height: 10px;
+}
+/* 내용  */
+.cal_list {
+	display: inline-block;
+	width: calc(35% - 3px);
+	height: 800px;
+	vertical-align: top;
+	border: 1px solid lightgray;
+}
+
+.add_btn {
+	display: table-cell;
+	vertical-align: middle;
+	text-align: center;
+	width: 50px;
+	height: 50px;
+}
+
+
+.cal_list_table {
+	width: 100%;
+	border-collapse: collapse;
+	text-align: center;
+	vertical-align: center;
+	font-size: 11pt;
+}
+
+.cal_list_table thead {
+	/* background-color: #004078; */
+	background: linear-gradient(#004B8D, #00305A);
+	color: white;
+
+}
+
+.cal_list_table tr {
+	height: 50px;
+}
+
+.cal_list_table td {
+	border-bottom: 1px solid lightgray;
+	cursor: pointer;
+}
+
+.cal_list_table tbody tr:hover {
+	background-color: #dae2f1;	
+}
+
+.cal_list_table .cal_sel_date {
+	text-align: left;
+}
+
+.cal_list_table td:nth-child(2) {
+	text-align: left;
+}
+
+.cal_sel_date {
+	text-indent: 10px;
+}
+
+.cal_flag_red {
+	display: inline-block;
+	width: 50px;
+	height: 50px;
+	vertical-align: top;
+	background-color: red;
+}
+
+.cal_flag_green {
+	display: inline-block;
+	width: 50px;
+	height: 50px;
+	vertical-align: top;
+	background-color: green;
+}
+
+.cal_flag_blue {
+	display: inline-block;
+	width: 50px;
+	height: 50px;
+	vertical-align: top;
+	background-color: blue;
+}
+
+.cal_time_area {
+	color: gray;
+	font-size: 10pt;
+	margin-top: 3px;
+	margin-bottom: 3px;
+	text-indent: 5px;
+}
+
+.cal_name {
+	color: blue;
+	font-size: 10pt;
+	margin-top: 3px;
+	margin-bottom: 3px;
+	text-indent: 5px;
+
+}
+
+.cal_dtl {
+	font-size: 11pt;
+	margin-bottom: 3px;
+	text-indent: 5px;
+}
+
+/* paging */
+
+.paging {
+	border-bottom: 0px !important;
+	font-size: 0pt;
+	text-align: center !important;
+	margin-top:10px;
+}
+
+.pagingD {
+/* 	font-famil: Times New Roman;
+ */	font-family: Georgia;
+	font-size:8.5pt;
+/* 	font-weight:bold;	
+ */	vertical-align:top;
+	display: inline-block; 
+	border-left: 1px solid lightgray;
+	border-top: 1px solid lightgray;
+	border-bottom: 1px solid lightgray;
+	width:18px;
+	height:18px;
+	padding-top:1px;
+	padding-left:1px;
+	color: #868686;
+	cursor: pointer;
+}
+
+.pagingD:hover {
+ 	background-color: #e2dddd;	
+	
+}
+
+#first{
+	background-image: url("../../images/common/arrow1_first_gray.png");
+	background-repeat: no-repeat;
+	background-size: 10px 10px;
+ 	background-position: 4px 4px;
+}
+
+#before{
+	background-image: url("../../images/common/arrow2_before_gray.png");
+	background-repeat: no-repeat;
+	background-size: 6px 10px;
+ 	background-position: 6px 4px;	
+}
+
+#next {
+	background-image: url("../../images/common/arrow3_next_gray.png");
+	background-repeat: no-repeat;
+	background-size: 6px 10px;
+ 	background-position: 7px 4px;		
+}
+
+#last{
+	border-right: 1px solid lightgray;
+	background-image: url("../../images/common/arrow4_last_gray.png");
+	background-repeat: no-repeat;
+	background-size: 10px 10px;
+ 	background-position: 5px 4px;	
+}
+/*  페이징 끝 */
+
+/* popuppaing */
+
+.popuppaging {
+	border-bottom: 0px !important;
+	font-size: 0pt;
+	text-align: center !important;
+	margin-top:10px;
+}
+
+.popuppagingD {
+/* 	font-famil: Times New Roman;
+ */	font-family: Georgia;
+	font-size:8.5pt;
+/* 	font-weight:bold;	
+ */	vertical-align:top;
+	display: inline-block; 
+	border-left: 1px solid lightgray;
+	border-top: 1px solid lightgray;
+	border-bottom: 1px solid lightgray;
+	width:18px;
+	height:18px;
+	padding-top:1px;
+	padding-left:1px;
+	color: #868686;
+	cursor: pointer;
+}
+
+.popuppagingD:hover {
+ 	background-color: #e2dddd;	
+	
+}
+
+#first{
+	background-image: url("../../images/common/arrow1_first_gray.png");
+	background-repeat: no-repeat;
+	background-size: 10px 10px;
+ 	background-position: 4px 4px;
+}
+
+#before{
+	background-image: url("../../images/common/arrow2_before_gray.png");
+	background-repeat: no-repeat;
+	background-size: 6px 10px;
+ 	background-position: 6px 4px;	
+}
+
+#next {
+	background-image: url("../../images/common/arrow3_next_gray.png");
+	background-repeat: no-repeat;
+	background-size: 6px 10px;
+ 	background-position: 7px 4px;		
+}
+
+#last{
+	border-right: 1px solid lightgray;
+	background-image: url("../../images/common/arrow4_last_gray.png");
+	background-repeat: no-repeat;
+	background-size: 10px 10px;
+ 	background-position: 5px 4px;	
+} /* 팝업 고객사 페이징 끝 */
+
+.cc tr > td {
+	border-bottom: 1px solid lightgray;
+ 	cursor: pointer;
+}
+
+.cc tr:hover {
+	background-color: lightgray;
+}
+
+/* 팝업 CSS */
+.schedule_pop {
+	width: 100%;
+	border-collapse: collapse;
+	vertical-align: center;
+	font-size: 15pt;
+}
+
+.schedule_pop th {
+	/* background-color: #004078; */
+	background: linear-gradient(#004B8D, #00305A);
+	color: white;
+}
+
+.schedule_pop tr {
+	height: 40px;
+}
+
+.schedule_pop td {
+	border-bottom: 1px solid lightgray;
+}
+
+input {
+	width: 98%;
+	height: 100%;
+	font-size: 12pt;
+}
+.search {
+	width: 60%;
+}
+
+select {
+	width: 100%;
+	height: 100%;
+	font-size: 12pt;
+}
+
+textarea {
+	resize: none;
+	width: 98%;
+	height: 70px;
+	font-size: 12pt;
+}
+ 
+.searchBtn, .searchBtn2, .searchBtn3, .searchBtn4 {
+	vertical-align: top;
+	height: 29px;
+	width: 29px;
+	background-image: url("../../images/common/searchIcon_black.png") !important;
+	background-repeat: no-repeat;
+	background-size: 20px 20px;
+	border: 1px solid lightgray;
+/* 	border-radius: 3px;
+ */background-position: 45% 45%;
+ 	outline-color: #d5e4f1;
+/*   	background: linear-gradient(#efefef, #dbdada);
+ */ 	
+ }
+ /* new 페이지 */
+ .calendar1 {
+	width: calc(100% - 60px);
+	height: calc(100% - 60px);
+	font-size: 12pt;
+}
+
+.fc-button-group {
+	display: none;
+}
+
+#prevBtn, #nextBtn, #personalBtn, #allBtn, #insertBtn, #searchBtn,
+	#viewBtn {
+	display: inline-block;
+	vertical-align: top;
+	width: 60px;
+	height: 40px;
+	background-color: #00305A;
+	color: white;
+	border-radius: 8px;
+	font-weight: bold;
+}
+
+#personalBtn, #allBtn, #insertBtn, #searchBtn, #dprtSelect {
+	float: right;
+}
+
+#personalBtn {
+	margin-right: 10px;
+}
+
+#viewBtn {
+	margin-left: 10px;
+}
+
+#prevBtn, #nextBtn, #viewBtn {
+	float: left;
+}
+
+#dprtSelect {
+	display: inline-block;
+	vertical-align: top;
+	width: 95px;
+	height: 40px;
+	font-size: 11pt;
+}
+
+.con_1 {
+	display: inline-block;
+	vertical-align: top;
+	font-size: 12pt;
+	margin-bottom: 20px;
+	margin-right: 10px;
+}
+
+.con_2 {
+	display: inline-block;
+	vertical-align: top;
+	font-size: 13pt;
+	margin-bottom: 20px;
+	margin-right: 38.68px;
+}
+
+.con_1_1, .con_1_2 {
+	display: inline-block;
+	vertical-align: top;
+	font-size: 13pt;
+	margin-bottom: 20px;
+}
+
+.con_1_2 {
+	margin-left: 20px;
+}
+
+.con2 {
+	display: inline-block;
+	vertical-align: top;
+	width: 100px;
+	height: 30px;
+	font-size: 11pt;
+}
+
+.con2_1 {
+	display: inline-block;
+	vertical-align: top;
+	width: 100px;
+	height: 30px;
+	font-size: 11pt;
+}
+
+.con3 {
+	display: inline-block;
+	vertical-align: top;
+	width: 140px;
+	height: 30px;
+	font-size: 11pt;
+	margin-right: 10px;
+}
+
+.con4 {
+	display: inline-block;
+	vertical-align: top;
+	width: 130px;
+	height: 30px;
+	font-size: 11pt;
+}
+
+#adtCon {
+	white-space: pre-wrap;
+	overflow: auto;
+	overflow-y: scroll;
+	font-size: 11pt;
+}

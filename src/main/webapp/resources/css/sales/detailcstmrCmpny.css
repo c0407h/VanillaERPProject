@@ -1,0 +1,83 @@
+@charset "UTF-8";
+
+/* 수정 */
+.updatecstmrcm{
+text-align:center;
+font-size: 17px;
+font-weight: bold;
+border-collapse: collapse;
+}
+.updatecstmrcm th{
+	background: linear-gradient(#004B8D, #00305A);
+	color: white;
+	width: 100px;
+	text-shadow: 1px 1px 2px grey;
+}
+
+
+.inputtxt{
+width:150px; 
+height:38px; 
+	font-size: 17px;
+}
+.select_grade{
+width:158px; 
+height:46px; 
+	font-size: 17px;
+}
+.select_type{
+width:158px; 
+height:46px; 
+	font-size: 17px;
+}
+
+
+
+
+
+
+
+/* 상세 */
+
+.detailcstmr{
+	border-collapse: collapse;
+	text-align: center;
+	vertical-align: middle;
+	font-size: 15pt;
+	font-weight: bold;
+	width: 100%
+}
+.empty{
+border-bottom: 1px solid gray;
+height: 8px;
+}
+.detailcstmr th{
+	background: linear-gradient(#004B8D, #00305A);
+	color: white;
+	text-shadow: 1px 1px 2px grey;
+}
+
+
+.BackBtn, .ChangeBtn, .DelBtn {
+	vertical-align: top;
+	height:29px;
+	width:75px;
+	border: 1px solid lightgray;
+ 	margin-bottom:10px;
+ 	color:#515151;
+ 	outline-color: #d5e4f1;
+	cursor: pointer;
+	float: right;
+	margin-left: 5px;
+}
+.Btnarea{
+	width: 760px;
+	margin: auto;
+	height: 30px;
+}
+.tbl2{
+	width: 760px;
+	margin: auto;
+	height: 600px;
+	color: #515151;	
+}

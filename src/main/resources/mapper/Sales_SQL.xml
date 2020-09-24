@@ -1,0 +1,1294 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="sales">
+
+<!-- 영업일정insert -->
+<insert id = "schdlAjax" parameterType ="hashmap">
+		 INSERT INTO SCHDL(SCHDL_NO ,EMPLY_NO, SCHDL_NAME, START_DATE, END_DATE, PLACE, CNTNT)
+         VALUES(#{schdlNo}, #{sEmplyNo}, #{schdlName}, TO_DATE(#{startDate}, 'YYYY-MM-DD'), 
+         TO_DATE(#{endDate}, 'YYYY-MM-DD'), #{place}, #{cntnt})	
+</insert>
+<insert id = "schdlAjax2" parameterType ="hashmap">
+		INSERT INTO BSNS_SCHDL(SCHDL_NO, BSNS_NO)
+        VALUES(#{schdlNo},#{bsnsNo})
+</insert>
+
+
+
+<!-- 영업일정list -->
+<select id="getnewSchdlList" parameterType="hashmap" resultType="hashmap">
+    SELECT  RNM,SCHDL_NO, SCHDL_NAME, START_DATE, END_DATE, PLACE, CNTNT, RGSTRTN_DATE, BSNS_NO
+        FROM( SELECT S.SCHDL_NO, S.SCHDL_NAME, TO_CHAR(S.START_DATE,'YYYY-MM-DD')AS START_DATE, TO_CHAR(S.END_DATE,'YYYY-MM-DD')AS END_DATE,
+     S.PLACE, S.CNTNT, TO_CHAR(S.RGSTRTN_DATE,'YY-MM-DD')AS RGSTRTN_DATE, BS.BSNS_NO, ROW_NUMBER() OVER (ORDER BY S.SCHDL_NO DESC)   AS RNM 
+     FROM BSNS_SCHDL BS INNER JOIN SCHDL S
+        ON BS.SCHDL_NO = S.SCHDL_NO
+        WHERE BSNS_NO = #{bsnsNo}
+         AND DLT_TYPE = 0)
+</select>
+<!-- 일정상세보기 -->
+<select id = "getSchdlAjax" parameterType="hashmap" resultType="hashmap">
+	SELECT  RNM,SCHDL_NO, SCHDL_NAME, START_DATE, END_DATE, PLACE, CNTNT, RGSTRTN_DATE, BSNS_NO
+        FROM( SELECT S.SCHDL_NO, S.SCHDL_NAME, TO_CHAR(S.START_DATE,'YYYY-MM-DD')AS START_DATE, TO_CHAR(S.END_DATE,'YYYY-MM-DD')AS END_DATE,
+     S.PLACE, S.CNTNT, TO_CHAR(S.RGSTRTN_DATE,'YY-MM-DD')AS RGSTRTN_DATE, BS.BSNS_NO, ROW_NUMBER() OVER (ORDER BY S.SCHDL_NO DESC)   AS RNM 
+     FROM BSNS_SCHDL BS INNER JOIN SCHDL S
+        ON BS.SCHDL_NO = S.SCHDL_NO
+        WHERE BSNS_NO = #{bsnsNo}
+        )
+        WHERE SCHDL_NO =#{schdlNo}
+</select>
+<!--DeleteAjax 일정삭제 -->
+<update id ="DeleteAjax" parameterType="hashmap">
+	UPDATE SCHDL SET DLT_TYPE = 1
+	WHERE SCHDL_NO = #{schdlNo}
+	<!-- AND EMPLY_NO = #{sEmplyNo} -->
+</update>
+
+
+
+
+
+
+
+
+
+<!-- 영업일정수정 updateSchdl-->
+<update id="updateSchdl" parameterType="hashmap">
+	    UPDATE SCHDL 
+		SET SCHDL_NAME =#{schdlName},
+        START_DATE = TO_DATE(#{startDate},'YYYY-MM-DD'),
+        END_DATE = TO_DATE( #{endDate},'YYYY-MM-DD'),
+        PLACE = #{place},
+        CNTNT = #{cntnt}
+		WHERE SCHDL_NO = #{schdlNo}
+</update>
+
+
+<!-- 영업의견delete -->
+<update id ="obDeleteAjax" parameterType="hashmap">
+	UPDATE BSNS_OPN SET DLT_YN = 0
+	WHERE BSNS_OPN_NO = #{bsnsOpnNo}
+	<!-- AND EMPLY_NO = #{sEmplyNo} -->
+	</update>
+
+<!-- 영업의견insert 작성자기준-->
+<insert id = "oBinsert" parameterType ="hashmap">
+	INSERT INTO BSNS_OPN(BSNS_OPN_NO,EMPLY_NO, BSNS_NO, CNTNT, RPRTNG_DATE )
+VALUES (BSNS_OPN_NO_SEQ.NEXTVAL, #{sEmplyNo}, #{bsnsNo},  #{opnCon} , TO_DATE(SYSDATE, 'YYYY-MM-DD'))
+</insert>
+<!-- 영업의견수정시에 하나 가져오기 -->
+<select id = "getoneAjax" parameterType="hashmap" resultType="hashmap">
+	SELECT BSNS_OPN_NO,EMPLY_NO, BSNS_NO, CNTNT, RPRTNG_DATE
+	FROM BSNS_OPN 
+	WHERE BSNS_OPN_NO = #{bsnsOpnNo}
+</select>
+<!-- 영업의견수정Ajax -->
+<update id ="obupdateAjax" parameterType="hashmap">
+	UPDATE BSNS_OPN SET CNTNT= #{opnCon}
+	WHERE BSNS_OPN_NO = #{bsnsOpnNo}
+</update>
+<!-- 영업의견list -->
+<select id="oBlist" parameterType="hashmap" resultType="hashmap">
+  SELECT RNUM, BSNS_OPN_NO, CNTNT, EMPLY_NAME, RDT, EMPLY_NO, BSNS_NO
+  	FROM(SELECT B.BSNS_OPN_NO,  B.CNTNT, E.EMPLY_NAME, <!-- TO_CHAR(RPRTNG_DATE, 'YYYY-MM-DD') AS RDT --> 
+  	 TO_CHAR(RPRTNG_DATE,'YYYY-MM-DD') AS RDT,  E.EMPLY_NO,B.BSNS_NO
+    ,ROW_NUMBER() OVER(ORDER BY BSNS_OPN_NO) AS RNUM
+   	FROM BSNS_OPN B INNER JOIN EMPLY E
+    ON B.EMPLY_NO = E.EMPLY_NO
+    WHERE BSNS_NO = #{bsnsNo}
+    AND DLT_YN = 1)
+</select>
+
+
+
+
+<!-- 영업리스트 -->
+<select id ="getList" parameterType="hashmap" resultType="hashmap">
+SELECT X.BSNS_NO, X.BSNS_STATE, X.BSNS_NAME, X.DT, X.CSTMR_NAME ,X.CSTMR_CMPNY_NAME
+FROM(   
+SELECT  B.BSNS_NO, B.BSNS_STATE, B.BSNS_NAME, TO_CHAR( B.RGSTRTN_DATE, 'YYYY-MM-DD') AS DT, C.CSTMR_NAME, CM.CSTMR_CMPNY_NAME,
+    ROW_NUMBER () OVER(ORDER BY BSNS_NO DESC) AS RNUM 
+FROM BSNS B INNER JOIN CSTMR C
+                   ON B.CSTMR_NO = C.CSTMR_NO
+                INNER JOIN CSTMR_CMPNY CM
+                   ON  C.CSTMR_CMPNY_NO = CM.CSTMR_CMPNY_NO              
+                  WHERE C.DLT_YN =1
+			<if test="searchTxt !=null and searchTxt!=''">
+				 AND (CSTMR_NAME LIKE '%'||#{searchTxt}||'%'
+				OR CSTMR_CMPNY_NAME LIKE '%'||#{searchTxt}||'%'
+				)
+			</if> )X
+	 WHERE X.RNUM BETWEEN #{startCnt} AND #{endCnt}
+</select>
+
+<select id="getListCnt" parameterType ="hashmap" resultType="Integer">
+SELECT COUNT(*)
+FROM(SELECT  B.BSNS_NO, B.BSNS_STATE, B.BSNS_NAME, TO_CHAR( B.RGSTRTN_DATE, 'YYYY-MM-DD') AS DT, C.CSTMR_NAME, CM.CSTMR_CMPNY_NAME,
+            ROW_NUMBER () OVER(ORDER BY BSNS_NO DESC) AS RNUM
+        FROM BSNS B INNER JOIN CSTMR C
+                           ON B.CSTMR_NO = C.CSTMR_NO
+                        INNER JOIN CSTMR_CMPNY CM
+                           ON  C.CSTMR_CMPNY_NO = CM.CSTMR_CMPNY_NO              
+                          WHERE C.DLT_YN =1
+<if test="searchTxt == null and searchTxt ==''">
+	<choose>
+		<when test="searchGbn ==0">
+		AND B.BSNS_STATE = 0
+		</when>
+		<when test="searchGbn ==1">
+		AND B.BSNS_STATE IS '1'
+		</when>
+		<when test="searchGbn ==2">
+		AND B.BSNS_STATE = 2
+		</when>
+		<when test="searchGbn ==3">
+		AND B.BSNS_STATE = 3
+		</when>
+		<when test="searchGbn ==4">
+		AND B.BSNS_STATE = 4
+		</when>
+		<when test="searchGbn ==5">
+		AND B.BSNS_STATE = 5
+		</when>
+	</choose>
+</if> )X
+</select>
+
+<!-- 기회등록작성 3개table -->
+	<insert id = "bsnswhole_ajax" parameterType ="hashmap">
+		INSERT INTO BSNS(BSNS_NO, CSTMR_NO, BSNS_NAME, RGSTRTN_DATE) 
+		VALUES(#{bsnsNo}, #{cstmr_no} , #{bsns_name}, TO_DATE(SYSDATE, 'YYYY-MM-DD'))
+	</insert>
+	
+	<insert id = "bsnswhole2" parameterType ="hashmap">
+		INSERT INTO BSNS_MNGR(EMPLY_NO, BSNS_NO) 
+		VALUES(#{sEmplyNo}, #{bsnsNo})
+	</insert>
+	
+	<insert id = "bsnswhole3" parameterType ="hashmap">
+		INSERT INTO CHNC(CHNC_NO, BSNS_NO, ENTRPRS_TYPE_NO, PRCHS_SALES_DVSN, EXPCTN_COST, OTHERS, EXPCTN_SCS_PRBLTY, RGSTRTN_DATE)
+		VALUES (CHNC_NO_SEQ.NEXTVAL, #{bsnsNo},#{entrprs_type_no}, #{prchs_sales_dvsn},  #{expctn_cost}, #{others},#{expctn_scs_prblty}, TO_DATE(SYSDATE, 'YYYY-MM-DD'))	
+	</insert>
+<!-- 영업제안등록작성2개 -->
+	<update id="writeSugajax1" parameterType="hashmap">
+		UPDATE BSNS 
+		SET BSNS_STATE = 2                                       
+		WHERE BSNS_NO =#{bsnsNo}
+	</update>
+	<insert id = "writeSugajax2" parameterType ="hashmap">
+		INSERT INTO SGSTN(SGSTN_NO, BSNS_NO, SGSTN_CNTNT, RQST_DATE, DLN_DATE, OTHERS, SGSTN_EXPCTN_SCS_PRBLTY, SGSTN_RGSTRTN_DATE)
+		VALUES (SGSTN_NO_SEQ.NEXTVAL, #{bsnsNo}, #{con} , TO_DATE(#{rqstDate},'YYYY-MM-DD') , TO_DATE(#{end_date},'YYYY-MM-DD'), #{ancon},#{expctn_scs_prblty2}, TO_DATE(SYSDATE, 'YYYY-MM-DD'))
+	</insert>
+<!-- 영업협상등록작성2개 -->
+	<update id="ngtn_Ajax" parameterType="hashmap">
+		UPDATE BSNS 
+		SET BSNS_STATE = 3                                       
+		WHERE BSNS_NO =#{bsnsNo}
+	</update>
+	<insert id = "ngtn_Ajax2" parameterType ="hashmap">
+		INSERT INTO NGTN(NGTN_NO, BSNS_NO, NGTN_CNTNT, NGTN_RQST_DATE, NGTN_DLN_DATE, CMPLTN_DATE, NGTN_EXPCTN_SCS_PRBLTY, NGTN_RGSTR_DATE)
+		VALUES (NGTN_NO_SEQ.NEXTVAL, #{bsnsNo}, #{NgtnCntnt} ,TO_DATE(#{NgtnRqst},'YYYY-MM-DD') , TO_DATE(#{NgtnDln}, 'YYYY-MM-DD'), TO_DATE(#{Cmpltn}, 'YYYY-MM-DD'), #{NgtnExPro}, TO_DATE(SYSDATE, 'YYYY-MM-DD'))
+	</insert>
+<!-- 영업수주등록작성2개 -->
+<update id="order_Ajax" parameterType="hashmap">
+		UPDATE BSNS 
+		SET BSNS_STATE = 4                                       
+		WHERE BSNS_NO =#{bsnsNo}
+	</update>
+	<insert id = "order_Ajax2" parameterType ="hashmap">
+		INSERT INTO ORDERS(ORDER_NO, BSNS_NO, ORDER_CNTNT,
+                          ORDER_DATE, ORDER_SCS_DATE, ORDER_RGSTR_DATE)
+		VALUES(ORDER_NO_SEQ.NEXTVAL, #{bsnsNo}, #{orderCntnt}, TO_DATE(#{order},'YYYY-MM-DD'), 
+        TO_DATE(#{scs}, 'YYYY-MM-DD'),TO_DATE(SYSDATE,'YYYY-MM-DD'))
+	</insert>
+	<!-- bsn시퀀스가져오기 -->
+	<select id="getBsnSeq" parameterType="hashmap" resultType="String">
+		SELECT BSNS_NO_SEQ.NEXTVAL
+		FROM DUAL
+	</select>
+	
+	
+	<!-- schdl시퀀스가져오기 -->
+	
+	<select id="getSchdlNoSeq" parameterType="hashmap" resultType="String">
+		SELECT SCHDL_NO_SEQ.NEXTVAL
+		FROM DUAL
+	</select>
+	
+	<!-- 상세보기 -->
+	<select id ="getSales" parameterType="hashmap" resultType="hashmap">
+	SELECT BSNS_NO, CSTMR_NO, BSNS_STATE, BSNS_NAME, RGDATE, EMPLY_NAME,CLPHN_NO, CSTMR_NAME, DPRTMNT ,
+CHDATE, EXPCTN_COST, DVSN, CHNC_NO, ENTRPRS_TYPE_NO, CSTNAME ,OT,EXPSP
+	FROM (SELECT B.BSNS_NO, B.CSTMR_NO, B.BSNS_STATE, B.BSNS_NAME,  TO_CHAR(RGSTRTN_DATE,'YYYY-MM-DD') AS RGDATE, EMP.EMPLY_NAME, T.CSTMR_NAME, 
+       T.DPRTMNT, T.PSTN, EMP.CLPHN_NO, TO_CHAR(RGSTRTN_DATE,'YYYY-MM-DD') AS CHDATE, C.EXPCTN_COST, C.PRCHS_SALES_DVSN AS DVSN,
+       C.CHNC_NO, C.ENTRPRS_TYPE_NO, TC.CSTMR_CMPNY_NAME AS CSTNAME, C.OTHERS AS OT,
+       C.EXPCTN_SCS_PRBLTY AS EXPSP 
+         FROM CHNC C INNER JOIN BSNS B
+                ON C.BSNS_NO = B.BSNS_NO
+                    INNER JOIN CSTMR T
+                            ON B.CSTMR_NO = T.CSTMR_NO
+                    INNER JOIN CSTMR_CMPNY TC
+                            ON T.CSTMR_CMPNY_NO = TC.CSTMR_CMPNY_NO
+                    INNER JOIN BSNS_MNGR BM
+                            ON B.BSNS_NO = BM.BSNS_NO
+                    INNER JOIN EMPLY EMP
+                            ON BM.EMPLY_NO = EMP.EMPLY_NO
+                            WHERE BSNS_NO = #{bsnsNo})
+	</select>
+	<!-- 제안상세보기 -->
+	<select id ="getSales2" parameterType="hashmap" resultType="hashmap">
+	 SELECT BSNS_STATE, BSNS_NAME, BSNS_NO, SGSTN_NO, OTHERS, DPRTMNT,CSTMR_NO, CSTMR_NAME, CSTNAME, EMPLY_NAME, CLPHN_NO, RDATE, EDATE, SGDATE, PR, SGSTN_CNTNT
+        FROM ( SELECT B.BSNS_STATE,  B.BSNS_NAME, B.BSNS_NO, S.SGSTN_NO, S.OTHERS, B.CSTMR_NO,  T.DPRTMNT,
+      T.CSTMR_NAME,  TC.CSTMR_CMPNY_NAME AS CSTNAME, EMP.EMPLY_NAME, EMP.CLPHN_NO,
+       TO_CHAR(RQST_DATE,'YYYY-MM-DD') AS RDATE,  TO_CHAR(DLN_DATE,'YYYY-MM-DD') AS EDATE,
+      TO_CHAR(SGSTN_RGSTRTN_DATE,'YYYY-MM-DD') AS SGDATE, S.SGSTN_EXPCTN_SCS_PRBLTY AS PR, S.SGSTN_CNTNT
+        FROM SGSTN S INNER JOIN BSNS B
+                ON S.BSNS_NO = B.BSNS_NO
+                    INNER JOIN CSTMR T
+                            ON B.CSTMR_NO = T.CSTMR_NO
+                    INNER JOIN CSTMR_CMPNY TC
+                            ON T.CSTMR_CMPNY_NO = TC.CSTMR_CMPNY_NO
+                    INNER JOIN BSNS_MNGR BM
+                            ON B.BSNS_NO = BM.BSNS_NO
+                    INNER JOIN EMPLY EMP
+                            ON BM.EMPLY_NO = EMP.EMPLY_NO
+                            WHERE B.BSNS_NO =#{bsnsNo})
+	</select> 
+	
+	<select id ="getSales3" parameterType="hashmap" resultType="hashmap">
+	SELECT BSNS_STATE, BSNS_NAME, BSNS_NO,  NGTN_NO, NGTN_CNTNT,DPRTMNT,CSTMR_NO, CSTMR_NAME, CSTNAME, EMPLY_NAME, CLPHN_NO, NGTNRQST, NGTNDLN, CMPLTN, NGEXPRO, RGSTR
+        FROM ( SELECT B.BSNS_STATE,  B.BSNS_NAME, B.BSNS_NO, N.NGTN_NO, N.NGTN_CNTNT, B.CSTMR_NO,  T.DPRTMNT,
+      T.CSTMR_NAME,  TC.CSTMR_CMPNY_NAME AS CSTNAME, EMP.EMPLY_NAME, EMP.CLPHN_NO,
+       TO_CHAR(NGTN_RQST_DATE,'YYYY-MM-DD') AS NGTNRQST,  TO_CHAR(NGTN_DLN_DATE,'YYYY-MM-DD') AS NGTNDLN,
+      TO_CHAR(CMPLTN_DATE,'YYYY-MM-DD') AS CMPLTN, N.NGTN_EXPCTN_SCS_PRBLTY AS NGEXPRO, TO_CHAR(NGTN_RGSTR_DATE,'YYYY-MM-DD') AS RGSTR
+    
+        FROM NGTN N INNER JOIN BSNS B
+                ON N.BSNS_NO = B.BSNS_NO
+                    INNER JOIN CSTMR T
+                            ON B.CSTMR_NO = T.CSTMR_NO
+                    INNER JOIN CSTMR_CMPNY TC
+                            ON T.CSTMR_CMPNY_NO = TC.CSTMR_CMPNY_NO
+                    INNER JOIN BSNS_MNGR BM
+                            ON B.BSNS_NO = BM.BSNS_NO
+                    INNER JOIN EMPLY EMP
+                            ON BM.EMPLY_NO = EMP.EMPLY_NO
+                            
+                            WHERE B.BSNS_NO =#{bsnsNo}
+                            )
+                            
+	</select> 
+	
+	<select id ="getSales4" parameterType="hashmap" resultType="hashmap">
+     SELECT BSNS_STATE, BSNS_NAME, BSNS_NO, ORDER_CNTNT, CSTMR_NO, DPRTMNT, ORDER_NO, CSTMR_NAME, CSTMR_CMPNY_NAME, EMPLY_NAME, ORDER_DATE, SCS_DATE, ORDER_RGSTR
+                     FROM(SELECT B.BSNS_STATE,  B.BSNS_NAME , B.BSNS_NO , O.ORDER_NO , O.ORDER_CNTNT ,
+     B.CSTMR_NO ,  T.DPRTMNT ,
+      T.CSTMR_NAME ,  TC.CSTMR_CMPNY_NAME, EMP.EMPLY_NAME , EMP.CLPHN_NO,
+       TO_CHAR(ORDER_DATE,'YYYY-MM-DD') AS ORDER_DATE , TO_CHAR(ORDER_SCS_DATE,'YYYY-MM-DD') AS SCS_DATE ,TO_CHAR(ORDER_RGSTR_DATE, 'YYYY-MM-DD') AS ORDER_RGSTR
+        FROM ORDERS O INNER JOIN BSNS B
+                ON O.BSNS_NO = B.BSNS_NO
+                    INNER JOIN CSTMR T
+                            ON B.CSTMR_NO = T.CSTMR_NO
+                    INNER JOIN CSTMR_CMPNY TC
+                            ON T.CSTMR_CMPNY_NO = TC.CSTMR_CMPNY_NO
+                    INNER JOIN BSNS_MNGR BM
+                            ON B.BSNS_NO = BM.BSNS_NO
+                    INNER JOIN EMPLY EMP
+                            ON BM.EMPLY_NO = EMP.EMPLY_NO
+                            WHERE B.BSNS_NO =#{bsnsNo}  ) 
+                                      
+	</select> 
+	
+	<!-- 고객CNT -->
+	<select id="getocstmrlistCnt" parameterType ="hashmap" resultType="Integer">
+	SELECT COUNT(*) AS CNT
+	FROM CSTMR C INNER JOIN CSTMR_CMPNY CM
+	       ON C.CSTMR_CMPNY_NO = CM.CSTMR_CMPNY_NO
+	WHERE C.DLT_YN = 1
+	<if test="select_txt !=null and select_txt !=''">
+			<choose>
+				<when test="select == 0">
+					AND( C.CSTMR_NAME LIKE '%'||#{select_txt}||'%'
+						OR CM.CSTMR_CMPNY_NAME LIKE '%'||#{select_txt}||'%'
+					)
+				</when>
+				<when test="select == 1">
+					AND C.CSTMR_NAME LIKE '%'||#{select_txt}||'%'
+				</when>
+				<when test="select == 2">
+					AND CM.CSTMR_CMPNY_NAME LIKE '%'||#{select_txt}||'%'
+				</when>
+			</choose>
+		</if>
+	</select>
+	
+	<!-- 고객리스트검색 -->
+	<select id ="cstmrlistajax" parameterType="hashmap" resultType="hashmap">
+	SELECT CSTMR_NO, CSTMR_NAME, DPRTMNT, PSTN, CNTCT, CSTMR_CMPNY_NAME
+	FROM(SELECT C.CSTMR_NO, C.CSTMR_NAME, C.DPRTMNT, C.PSTN, C.CNTCT, CM.CSTMR_CMPNY_NAME,
+			ROW_NUMBER() OVER(ORDER BY CSTMR_NAME DESC) AS RNUM
+ 		 FROM CSTMR C INNER JOIN CSTMR_CMPNY CM
+                     ON C.CSTMR_CMPNY_NO = CM.CSTMR_CMPNY_NO
+    	 WHERE DLT_YN =1
+    <if test="select_txt !=null and select_txt!=''">
+	<choose>
+		<when test="select ==0">
+		AND ( CSTMR_NAME LIKE '%'||#{select_txt}||'%'
+			OR CSTMR_CMPNY_NAME LIKE '%'||#{select_txt}||'%')
+		</when>
+		<when test="select ==1">
+		AND CSTMR_NAME LIKE '%'||#{select_txt}||'%'
+		</when>
+		<when test="select ==2">
+		WHERE CSTMR_CMPNY_NAME LIKE '%'||#{select_txt}||'%'
+		</when>
+	</choose>
+	</if>
+	)M
+	WHERE RNUM BETWEEN #{startCnt} AND #{endCnt}
+	</select>
+	<!-- 기회수정2개 -->
+	<update id="updatechance" parameterType="hashmap">
+		UPDATE BSNS 
+		SET BSNS_NAME =#{bsns_name}, CSTMR_NO =#{cstmr_no}                                        
+		WHERE BSNS_NO =#{bsnsNo}
+	</update>	
+	<update id="updatechance2" parameterType="hashmap">
+		UPDATE CHNC
+		SET EXPCTN_SCS_PRBLTY =#{expctn_scs_prblty}, EXPCTN_COST =#{expctn_cost}, OTHERS =#{others}
+		WHERE BSNS_NO = #{bsnsNo}
+	</update>	
+	<!-- 기회수정2개 -->
+	<!-- 제안수정2개 -->
+	<update id="updateSug" parameterType="hashmap">
+		UPDATE BSNS 
+		SET BSNS_NAME =#{bsns_name}, CSTMR_NO =#{cstmr_no}                                       
+		WHERE BSNS_NO =#{bsnsNo}	
+	</update>
+	<update id="updateSug2" parameterType="hashmap">
+	UPDATE SGSTN 
+		SET RQST_DATE =TO_DATE(#{rqstDate},'YYYY-MM-DD'),
+        DLN_DATE =TO_DATE(#{end_date},'YYYY-MM-DD'),
+        OTHERS=#{ancon},
+        SGSTN_EXPCTN_SCS_PRBLTY =#{expctn_scs_prblty2},
+        SGSTN_CNTNT=#{con}
+		WHERE BSNS_NO = #{bsnsNo}
+	</update>
+	
+	<!-- 협상수정2개 -->
+	<update id="updatengtn" parameterType="hashmap">
+		UPDATE BSNS 
+		SET BSNS_NAME =#{bsns_name}, CSTMR_NO =#{cstmr_no}                                       
+		WHERE BSNS_NO =#{bsnsNo}	
+	</update>
+	<update id="updatengtn2" parameterType="hashmap">
+	 UPDATE NGTN 
+		SET NGTN_RQST_DATE =TO_DATE( #{ngtnrqst},'YYYY-MM-DD'),
+        NGTN_DLN_DATE =TO_DATE( #{ngtndln},'YYYY-MM-DD'),
+        CMPLTN_DATE=TO_DATE( #{cmpltn},'YYYY-MM-DD'),
+        NGTN_EXPCTN_SCS_PRBLTY =#{ngexpro},
+        NGTN_CNTNT = #{ngtnCntnt}
+		WHERE BSNS_NO = #{bsnsNo}
+	</update>
+	<!-- 수주수정2개 DB=수정값-->
+	<update id="orderAjax" parameterType="hashmap">
+		UPDATE BSNS 
+		SET BSNS_NAME =#{bsns_name}, CSTMR_NO =#{cstmr_no}                                       
+		WHERE BSNS_NO =#{bsnsNo}	
+	</update>
+	<update id="orderAjax2" parameterType="hashmap">
+	 UPDATE ORDERS 
+		SET ORDER_DATE =TO_DATE( #{order},'YYYY-MM-DD'),
+        ORDER_SCS_DATE =TO_DATE( #{scs},'YYYY-MM-DD'),
+        ORDER_CNTNT = #{orderCntnt}
+		WHERE BSNS_NO = #{bsnsNo}
+	</update>		
+
+
+<!-- 품목리스트 itemlist-->
+<select id="itemlistCnt" parameterType ="hashmap" resultType="Integer">
+SELECT COUNT(*) AS CNT FROM ITEM
+WHERE DLT_TYPE =1
+
+</select>
+
+
+<select id ="itemlistAjax" parameterType="hashmap" resultType="hashmap">
+SELECT ITEM_NO, ITEM_NAME, STNDRD_PRICE, RGSTRTN,DLT
+FROM( SELECT ITEM_NO, ITEM_NAME, STNDRD_PRICE, TO_CHAR(RGSTRTN_DATE, 'YYYY-MM-DD')AS RGSTRTN ,  TO_CHAR(DLT_DATE, 'YYYY-MM-DD') AS DLT
+FROM ITEM
+WHERE DLT_TYPE =1
+)
+</select>	
+
+
+<select id="getItemSeq" parameterType="hashmap" resultType="String">
+		SELECT ITEM_NO_SEQ.NEXTVAL
+		FROM DUAL
+</select>
+
+
+
+
+
+
+
+
+<!-- 제안품목listnewsuggestListAjax -->
+<select id ="newsuggestListAjax" parameterType="hashmap" resultType="hashmap">
+SELECT  RNUM, BSNS_NO, SGSTN_NO, ITEM_NO, ITEM_NAME, SGSTN_COST, SGSTN_QNTY ,TO_CHAR(RGSTRTN_DATE, 'YYYY-MM-DD') AS RGSTRTN_DATE
+FROM(SELECT  SI.SGSTN_NO, SI.ITEM_NO, I.ITEM_NAME,  SI.SGSTN_COST, SI.SGSTN_QNTY,  SI.RGSTRTN_DATE, 
+ROW_NUMBER() OVER(ORDER BY SI.ITEM_NO) AS RNUM , B.BSNS_NO
+FROM ITEM I INNER JOIN SGSTN_ITEM SI
+        ON SI.ITEM_NO = I.ITEM_NO
+        INNER JOIN SGSTN S
+        ON S.SGSTN_NO =  SI.SGSTN_NO
+        INNER JOIN BSNS B
+        ON B.BSNS_NO = S.BSNS_NO
+        WHERE DLT_TYPE=1
+       AND B.BSNS_NO  = #{bsnsNo})
+</select>	
+
+
+
+
+
+<!-- 협상품목listnewsuggestListAjax2 -->
+<select id ="newsuggestListAjax2" parameterType="hashmap" resultType="hashmap">
+SELECT  RNUM, BSNS_NO, NGTN_NO, ITEM_NO, ITEM_NAME, NGTN_COST, NGTN_QNTY ,TO_CHAR(RGSTRTN_DATE, 'YYYY-MM-DD') AS RGSTRTN_DATE
+FROM(SELECT  NI.NGTN_NO, NI.ITEM_NO, I.ITEM_NAME,  NI.NGTN_COST, NI.NGTN_QNTY,  NI.RGSTRTN_DATE, 
+ROW_NUMBER() OVER(ORDER BY NI.ITEM_NO) AS RNUM , B.BSNS_NO
+FROM ITEM I INNER JOIN NGTN_ITEM NI
+        ON NI.ITEM_NO = I.ITEM_NO
+        INNER JOIN NGTN N
+        ON N.NGTN_NO =  NI.NGTN_NO
+        INNER JOIN BSNS B
+        ON B.BSNS_NO = N.BSNS_NO
+        WHERE DLT_TYPE=1
+        AND B.BSNS_NO  = #{bsnsNo})
+</select>
+<!-- 수주품목저장itemorderAjax -->
+<insert id = "itemorderAjax" parameterType ="hashmap">
+ INSERT INTO ORDER_ITEM(ORDER_NO ,ITEM_NO, COST, QNTY ,RGSTRTN_DATE)
+ VALUES(#{orderNo}, #{itemNo}, #{Cost}, #{Quty}, TO_DATE(SYSDATE, 'YYYY-MM-DD'))
+</insert>
+<update id ="itemorderAjax2" parameterType="hashmap">
+ UPDATE ITEM
+        SET ITEM_NAME =#{itemName},
+        ITEM_NO = #{itemNo}
+        WHERE ITEM_NO =#{itemNo}
+</update>
+<!-- 품목제안저장itemlist_Ajax -->
+<insert id = "itemsgstnAjax" parameterType ="hashmap">
+ INSERT INTO SGSTN_ITEM(SGSTN_NO ,ITEM_NO, SGSTN_COST, SGSTN_QNTY ,RGSTRTN_DATE)
+ VALUES(#{sgstnNo}, #{itemNo}, #{sgstnCost}, #{sgstnQnty}, TO_DATE(SYSDATE, 'YYYY-MM-DD'))
+</insert>
+<update id ="itemsgstnAjax2" parameterType="hashmap">
+ UPDATE ITEM
+        SET ITEM_NAME =#{itemName},
+        ITEM_NO = #{itemNo}
+        WHERE ITEM_NO =#{itemNo}
+</update>
+<!-- 품목협상저장itemngtnAjax -->
+<insert id = "itemngtnAjax" parameterType ="hashmap">
+INSERT INTO NGTN_ITEM(NGTN_NO ,ITEM_NO, NGTN_COST, NGTN_QNTY ,RGSTRTN_DATE)
+ VALUES(#{ngtnNo}, #{itemNo}, #{ngtnCost}, #{ngtnQuty}, TO_DATE(SYSDATE, 'YYYY-MM-DD'))
+</insert>
+<update id ="itemngtnAjax2" parameterType="hashmap">
+ UPDATE ITEM
+        SET ITEM_NAME =#{itemName},
+        ITEM_NO = #{itemNo}
+        WHERE ITEM_NO =#{itemNo}
+</update>
+<!-- 수주품목list newsuggestListAjax3 -->
+<select id ="newsuggestListAjax3" parameterType="hashmap" resultType="hashmap">
+SELECT  RNUM, BSNS_NO, ORDER_NO, ITEM_NO, ITEM_NAME, COST, QNTY ,TO_CHAR(RGSTRTN_DATE, 'YYYY-MM-DD') AS RGSTRTN_DATE
+FROM(SELECT  OI.ORDER_NO, OI.ITEM_NO, I.ITEM_NAME,  OI.COST, OI.QNTY,  OI.RGSTRTN_DATE, 
+ROW_NUMBER() OVER(ORDER BY OI.ITEM_NO) AS RNUM , B.BSNS_NO
+FROM ITEM I INNER JOIN ORDER_ITEM OI
+        ON OI.ITEM_NO = I.ITEM_NO
+        INNER JOIN ORDERS O
+        ON O.ORDER_NO =  OI.ORDER_NO
+        INNER JOIN BSNS B
+        ON B.BSNS_NO = O.BSNS_NO
+        WHERE DLT_TYPE=1
+      AND B.BSNS_NO  = #{bsnsNo})
+      
+</select>
+<!-- 품목리스트 getongtnlistCnt-->
+<select id="getongtnlistCnt" parameterType ="hashmap" resultType="Integer">
+ SELECT COUNT(*) AS CNT 
+ FROM NGTN_ITEM N INNER JOIN ITEM I
+ ON N.ITEM_NO = I.ITEM_NO
+WHERE I.DLT_TYPE =1  AND NGTN_NO = #{ngtnNo}
+</select>
+<select id="getosgstnlistCnt" parameterType ="hashmap" resultType="Integer">
+  SELECT COUNT(*) AS CNT FROM SGSTN_ITEM S INNER JOIN ITEM I
+ ON S.ITEM_NO = I.ITEM_NO WHERE I.DLT_TYPE =1  AND SGSTN_NO = #{sgstnNo}
+</select>
+<select id="getoorderlistCnt" parameterType ="hashmap" resultType="Integer">
+ SELECT COUNT(*) AS CNT 
+ FROM ORDER_ITEM O INNER JOIN ITEM I
+ ON O.ITEM_NO = I.ITEM_NO
+WHERE I.DLT_TYPE =1  AND ORDER_NO = #{orderNo}
+</select>
+<!-- 품목상세가져오기 후 삭제 DeleteorderItemAjax -->
+<update id ="DeleteorderItemAjax" parameterType="hashmap">
+	UPDATE ITEM SET DLT_TYPE = 0
+	WHERE ITEM_NO = #{itemNo}
+	<!-- AND EMPLY_NO = #{sEmplyNo} -->
+</update>
+<!-- 품목TR수주상세가져오기 getOrderItemlAjax-->
+<select id ="getOrderItemlAjax" parameterType="hashmap" resultType="hashmap">
+SELECT  RNUM, BSNS_NO, ORDER_NO, ITEM_NO, ITEM_NAME, COST, QNTY ,TO_CHAR(RGSTRTN_DATE, 'YYYY-MM-DD') AS RGSTRTN_DATE
+FROM(SELECT  OI.ORDER_NO, OI.ITEM_NO, I.ITEM_NAME,  OI.COST, OI.QNTY,  OI.RGSTRTN_DATE, 
+ROW_NUMBER() OVER(ORDER BY OI.ITEM_NO) AS RNUM , B.BSNS_NO
+FROM ITEM I INNER JOIN ORDER_ITEM OI
+        ON OI.ITEM_NO = I.ITEM_NO
+        INNER JOIN ORDERS O
+        ON O.ORDER_NO =  OI.ORDER_NO
+        INNER JOIN BSNS B
+        ON B.BSNS_NO = O.BSNS_NO
+        WHERE DLT_TYPE=1
+      AND B.BSNS_NO  = #{bsnsNo} AND I.ITEM_NO =#{itemNo})
+      
+</select>
+
+<!-- DeletengtnItemAjax  품목상세가져오기후 삭제 -->
+<update id ="DeletengtnItemAjax" parameterType="hashmap">
+	UPDATE ITEM SET DLT_TYPE = 0
+	WHERE ITEM_NO = #{itemNo}
+	<!-- AND EMPLY_NO = #{sEmplyNo} -->
+</update>
+
+<!-- 품목TR상세가져오기 -->
+<select id = "getSgstnItemlAjax" parameterType="hashmap" resultType="hashmap">
+ SELECT  RNUM, BSNS_NO, SGSTN_NO, ITEM_NO, ITEM_NAME, SGSTN_COST, SGSTN_QNTY ,TO_CHAR(RGSTRTN_DATE, 'YYYY-MM-DD') AS RGSTRTN_DATE
+FROM(SELECT  SI.SGSTN_NO, SI.ITEM_NO, I.ITEM_NAME,  SI.SGSTN_COST, SI.SGSTN_QNTY,  SI.RGSTRTN_DATE, 
+ROW_NUMBER() OVER(ORDER BY SI.ITEM_NO) AS RNUM , B.BSNS_NO
+FROM ITEM I INNER JOIN SGSTN_ITEM SI
+        ON SI.ITEM_NO = I.ITEM_NO
+        INNER JOIN SGSTN S
+        ON S.SGSTN_NO =  SI.SGSTN_NO
+        INNER JOIN BSNS B
+        ON B.BSNS_NO = S.BSNS_NO
+        WHERE DLT_TYPE=1
+       AND B.BSNS_NO  = #{bsnsNo}
+       AND I.ITEM_NO =#{itemNo})
+</select>
+
+<!--DeletesgstnItemAjax 품목상세가져오기 후에 삭제 -->
+<update id ="DeletesgstnItemAjax" parameterType="hashmap">
+	UPDATE ITEM SET DLT_TYPE = 0
+	WHERE ITEM_NO = #{itemNo}
+	<!-- AND EMPLY_NO = #{sEmplyNo} -->
+</update>
+
+<!-- 품목TR상세가져오기 -->
+<select id ="getNgtnItemlAjax" parameterType="hashmap" resultType="hashmap">
+SELECT  RNUM, BSNS_NO, NGTN_NO, ITEM_NO, ITEM_NAME, NGTN_COST, NGTN_QNTY ,TO_CHAR(RGSTRTN_DATE, 'YYYY-MM-DD') AS RGSTRTN_DATE
+FROM(SELECT  NI.NGTN_NO, NI.ITEM_NO, I.ITEM_NAME,  NI.NGTN_COST, NI.NGTN_QNTY,  NI.RGSTRTN_DATE, 
+ROW_NUMBER() OVER(ORDER BY NI.ITEM_NO) AS RNUM , B.BSNS_NO
+FROM ITEM I INNER JOIN NGTN_ITEM NI
+        ON NI.ITEM_NO = I.ITEM_NO
+        INNER JOIN NGTN N
+        ON N.NGTN_NO =  NI.NGTN_NO
+        INNER JOIN BSNS B
+        ON B.BSNS_NO = N.BSNS_NO
+        WHERE DLT_TYPE=1
+        AND B.BSNS_NO  = #{bsnsNo} AND I.ITEM_NO =#{itemNo})
+</select>
+
+
+
+
+
+<!-- 고객관리 -->
+<select id="getCstmrCnt" parameterType="hashmap" resultType="Integer">
+SELECT COUNT(*) AS CNT
+FROM CSTMR C INNER JOIN CSTMR_CMPNY CM
+                ON C.CSTMR_CMPNY_NO = CM.CSTMR_CMPNY_NO
+             INNER JOIN CSTMR_MNGR CSM
+                ON C.CSTMR_NO = CSM.CSTMR_NO
+             INNER JOIN EMPLY EM
+                ON CSM.EMPLY_NO = EM.EMPLY_NO
+            WHERE C.DLT_YN =1
+            AND CSM.DLT_DATE IS NULL
+		<if test="search_cus != null and search_cus != '' ">
+			<choose>
+				<when test="select_cus == 0">
+					AND( C.CSTMR_NAME LIKE '%'||#{search_cus}||'%'
+						OR CM.CSTMR_CMPNY_NAME LIKE '%'||#{search_cus}||'%'
+						OR EM.EMPLY_NAME LIKE '%'||#{search_cus}||'%'
+					)
+				</when>
+				<when test="select_cus == 1">
+					AND CM.CSTMR_CMPNY_NAME LIKE '%'||#{search_cus}||'%'
+				</when>
+				<when test="select_cus == 2">
+					AND C.CSTMR_NAME LIKE '%'||#{search_cus}||'%'
+				</when>
+				<when test="select_cus == 3">
+					AND EM.EMPLY_NAME LIKE '%'||#{search_cus}||'%'
+				</when>
+			</choose>
+		</if>
+		
+</select>
+
+
+
+<select id="getCstmrList" parameterType="hashmap" resultType="hashmap">
+SELECT A.CSTMR_NO, A.CSTMR_CMPNY_NAME, A.CSTMR_NAME, A.PSTN, A.CNTCT,  A.EMPLY_NAME, A.RGSTRTN_DATE
+FROM(SELECT C.CSTMR_NO, CM.CSTMR_CMPNY_NAME, C.CSTMR_NAME, C.PSTN, C.CNTCT,   EM.EMPLY_NAME, TO_CHAR(C.RGSTRTN_DATE, 'YY-MM-DD') AS RGSTRTN_DATE,
+        ROW_NUMBER() OVER(ORDER BY C.CSTMR_NO DESC) AS RNUM
+FROM CSTMR C INNER JOIN CSTMR_CMPNY CM
+                ON C.CSTMR_CMPNY_NO = CM.CSTMR_CMPNY_NO
+             INNER JOIN CSTMR_MNGR CSM
+                ON C.CSTMR_NO = CSM.CSTMR_NO
+             INNER JOIN EMPLY EM
+                ON CSM.EMPLY_NO = EM.EMPLY_NO
+WHERE C.DLT_YN =1
+ AND CSM.DLT_DATE IS NULL
+        <if test="search_cus != null and search_cus != '' ">
+			<choose>
+				<when test="select_cus == 0">
+					AND( CSTMR_NAME LIKE '%'||#{search_cus}||'%'
+						OR CSTMR_CMPNY_NAME LIKE '%'||#{search_cus}||'%'
+						OR EMPLY_NAME LIKE '%'||#{search_cus}||'%'
+					)
+				</when>
+				<when test="select_cus == 1">
+					AND CSTMR_CMPNY_NAME LIKE '%'||#{search_cus}||'%'
+				</when>
+				<when test="select_cus == 2">
+					AND CSTMR_NAME LIKE '%'||#{search_cus}||'%'
+				</when>
+				<when test="select_cus == 3">
+					AND EMPLY_NAME LIKE '%'||#{search_cus}||'%'
+				</when>
+
+			
+			</choose>
+		</if>
+        ) A
+WHERE A.RNUM BETWEEN #{startCnt} AND #{endCnt}
+
+</select>
+
+
+<!-- 고객사 관리 -->
+<select id="getCmpnyCnt" parameterType="hashmap" resultType="Integer">
+	SELECT COUNT(*) AS CNT
+	FROM CSTMR_CMPNY CM INNER JOIN EMPLY EM
+	            ON CM.EMPLY_NO = EM.EMPLY_NO
+	WHERE CM.EMPLY_NO = EM.EMPLY_NO
+		<if test="search_cus != null and search_cus != '' ">
+			<choose>
+				<when test="select_cus == 0">
+					AND(CM.CSTMR_CMPNY_NAME LIKE '%'||#{search_cus}||'%'
+					OR EM.EMPLY_NAME LIKE '%'||#{search_cus}||'%'
+					)
+				</when>
+				<when test="select_cus == 1">
+					AND CM.CSTMR_CMPNY_NAME LIKE '%'||#{search_cus}||'%'
+				</when>
+				<when test="select_cus == 2">
+					AND EM.EMPLY_NAME LIKE '%'||#{search_cus}||'%'
+				</when>
+			</choose>
+		</if>
+</select>
+
+<select id="getCmpnyList" parameterType="hashmap" resultType="hashmap">
+SELECT R.CSTMR_CMPNY_NO, R.CSTMR_CMPNY_NAME, R.CMPNY_CNTCT, 
+             R.CRPRT_RGSTRTN_NO, R.EMPLY_NAME, R.PSTN_NAME, R.RGSTRTN_DATE, RNUM
+ FROM(SELECT CM.CSTMR_CMPNY_NO, CM.CSTMR_CMPNY_NAME, CM.CMPNY_CNTCT, 
+         CM.CRPRT_RGSTRTN_NO, EM.EMPLY_NAME, PS.PSTN_NAME, TO_CHAR(CM.RGSTRTN_DATE, 'YY-MM-DD') AS RGSTRTN_DATE,
+         ROW_NUMBER() OVER(ORDER BY CM.CSTMR_CMPNY_NO DESC) AS RNUM
+     FROM PSTN PS INNER JOIN PRSNL_APNTMNTS PA
+	                     ON PS.PSTN_NO = PA.PSTN_NO
+	                 INNER JOIN EMPLY EM
+	                     ON PA.EMPLY_NO = EM.EMPLY_NO
+	                 INNER JOIN CSTMR_CMPNY CM
+	                     ON EM.EMPLY_NO = CM. EMPLY_NO
+        <if test="search_cus != null and search_cus != '' ">
+			<choose>
+				<when test="select_cus == 0">
+					AND(CM.CSTMR_CMPNY_NAME LIKE '%'||#{search_cus}||'%'
+						OR EM.EMPLY_NAME LIKE '%'||#{search_cus}||'%'
+					)
+				</when>	
+				<when test="select_cus == 1">
+					AND CM.CSTMR_CMPNY_NAME LIKE '%'||#{search_cus}||'%'
+				</when>
+				<when test="select_cus == 2">
+					AND EM.EMPLY_NAME LIKE '%'||#{search_cus}||'%'
+				</when>
+
+			
+			</choose>
+		</if>
+           ) R
+WHERE R.RNUM BETWEEN #{startCnt} AND #{endCnt}
+ ORDER BY R.CSTMR_CMPNY_NO DESC
+</select>
+<!-- 고객사 등록 -->
+<insert id="CSTMRCMPNYAdd" parameterType="hashmap">
+	INSERT INTO CSTMR_CMPNY
+	VALUES(CSTMR_CMPNY_NO_SEQ.NEXTVAL, #{select_type}, #{select_grade}, #{sEmplyNo}, #{cstmrname}, #{crprtrgstrtnno}, #{rprsntv}, #{adrs}, #{cstmr_cmpny_fax}, 
+				#{cstmr_cmpny_email}, #{cmpnycntct}, TO_DATE(SYSDATE, 'YY-MM-DD'))
+</insert>
+
+
+
+<!-- 등급가져오기 -->
+<select id="getgradeList" parameterType="hashmap" resultType="hashmap">
+	SELECT GRADE_NO, GRADE_NAME
+	FROM CSTMR_CMPNY_GRADE
+	ORDER BY GRADE_NO ASC
+</select>
+
+<!-- 유형가져오기 -->
+<select id="gettypeList" parameterType="hashmap" resultType="hashmap">
+	SELECT CSTMR_CMPNY_TYPE_NO, CSTMR_CMPNY_TYPE_NAME
+	FROM CSTMR_CMPNY_TYPE
+	ORDER BY CSTMR_CMPNY_TYPE_NO ASC
+</select>
+
+<!-- 고객사 상세 -->
+<select id="getdetailCstmrCmpnyList" parameterType="hashmap" resultType="hashmap">
+	SELECT CM.CSTMR_CMPNY_NAME, CM.CRPRT_RGSTRTN_NO, CM.RPRSNTV, CM.CMPNY_CNTCT, CM.ADRS,CM.FAX, 
+				EM.EMPLY_NAME, EM.CLPHN_NO, EM.EMAIL,EM.EMPLY_NO, 
+				CMG.GRADE_NAME, CMT.CSTMR_CMPNY_TYPE_NAME,  PS.PSTN_NAME,  DPRT.DPRTMNT_NAME, CM.CSTMR_CMPNY_NO
+	FROM CSTMR_CMPNY CM INNER JOIN EMPLY EM
+	               		     ON CM.EMPLY_NO = EM.EMPLY_NO
+                        INNER JOIN CSTMR_CMPNY_GRADE CMG
+                   		     ON CMG.GRADE_NO = CM.GRADE_NO 
+                  		INNER JOIN CSTMR_CMPNY_TYPE CMT
+                        	 ON CM.CSTMR_CMPNY_TYPE_NO = CMT.CSTMR_CMPNY_TYPE_NO
+                        INNER JOIN PRSNL_APNTMNTS PA
+                             ON EM.EMPLY_NO = PA.EMPLY_NO
+                    	INNER JOIN PSTN PS
+                       		 ON PA.PSTN_NO = PS.PSTN_NO 
+                       	INNER JOIN DPRTMNT DPRT
+                       		 ON DPRT.DPRTMNT_NO = PA.DPRTMNT_NO	 
+                       		
+    WHERE CM.CSTMR_CMPNY_NO = #{cstmrcmpnyno}
+</select>
+
+<!-- 고객사 상세 수정 -->
+<update id="CSTMRCMPNYupdate" parameterType="hashmap">
+		UPDATE CSTMR_CMPNY
+		SET RPRSNTV = #{rprsntv}, CMPNY_CNTCT = #{cmpnycntct}, ADRS = #{adrs}, 
+					FAX = #{cstmr_cmpny_fax}, GRADE_NO = #{select_grade}, CSTMR_CMPNY_TYPE_NO = #{select_type}
+		WHERE CSTMR_CMPNY_NO = #{cstmrcmpnyno}
+		AND EMPLY_NO = #{emplyNo}
+</update>
+
+<!-- 고객등록 고객사 조회 보-->
+
+<select id="CstmrAddgetcstmrcmpnyCnt" parameterType="hashmap" resultType="Integer">
+	SELECT COUNT(*) AS CNT
+	FROM CSTMR_CMPNY CM INNER JOIN EMPLY EM
+	            ON CM.EMPLY_NO = EM.EMPLY_NO
+	WHERE CM.EMPLY_NO = EM.EMPLY_NO
+	<if test="search_cmpny_txt != null and search_cmpny_txt != '' ">
+					AND CM.CSTMR_CMPNY_NAME LIKE '%'||#{search_cmpny_txt}||'%'
+	</if>
+		
+</select>
+
+<select id="CstmrAddgetsearchcstmrcmpnyList" parameterType="hashmap" resultType="hashmap">
+SELECT R.CSTMR_CMPNY_NO, R.CSTMR_CMPNY_NAME, R.CMPNY_CNTCT, 
+          R.FAX, R.EMAIL, R.ADRS
+FROM(SELECT CSTMR_CMPNY_NO,CSTMR_CMPNY_NAME, CMPNY_CNTCT, FAX, EMAIL, ADRS,
+	ROW_NUMBER() OVER(ORDER BY CSTMR_CMPNY_NO DESC) AS RNUM
+FROM CSTMR_CMPNY 	
+
+	<if test="search_cmpny_txt != null and search_cmpny_txt != '' ">
+						WHERE CSTMR_CMPNY_NAME LIKE '%'||#{search_cmpny_txt}||'%'
+	</if>
+
+           ) R
+WHERE R.RNUM BETWEEN #{startCnt} AND #{endCnt}
+ORDER BY CSTMR_CMPNY_NO DESC
+ 
+</select>
+
+
+<!-- 고객 등록 -->
+<insert id="AddCstmr" parameterType="hashmap">
+
+	INSERT INTO CSTMR
+	VALUES(#{CstmrNoSeq}, #{cstmrcmpnyno2}, #{select_grade}, #{sEmplyNo},#{cstmr} , #{Cdptmnt}, #{Cpstn}, 
+			#{cntct},#{Cemail}, TO_DATE(SYSDATE,'YY-MM-DD'), 1)
+</insert>
+<!-- 고객 상세 -->
+<select id="getdetailCstmr" parameterType="hashmap" resultType="hashmap">
+SELECT C.CSTMR_NAME, C.CNTCT, C.PSTN, C.EMAIL AS CSTMREMAIL, C.DPRTMNT, C.GRADE_NO, CM.CSTMR_CMPNY_NAME,
+	            CM.CMPNY_CNTCT, CM.FAX, CM.EMAIL AS CMPNYEMAIL, CM.ADRS, EM.EMPLY_NO, CMG.GRADE_NAME, EM.EMPLY_NAME, PS.PSTN_NAME,DPRT.DPRTMNT_NAME
+	
+	FROM CSTMR_CMPNY CM INNER JOIN CSTMR C
+	                        ON CM.CSTMR_CMPNY_NO = C.CSTMR_CMPNY_NO
+	                    INNER JOIN EMPLY EM
+	                         ON C.EMPLY_NO = EM.EMPLY_NO
+	                    INNER JOIN CSTMR_CMPNY_GRADE CMG
+	                         ON CMG.GRADE_NO = C.GRADE_NO 
+	                    INNER JOIN CSTMR_CMPNY_TYPE CMT
+	                         ON CM.CSTMR_CMPNY_TYPE_NO = CMT.CSTMR_CMPNY_TYPE_NO
+	                    INNER JOIN PRSNL_APNTMNTS PA
+	                         ON EM.EMPLY_NO = PA.EMPLY_NO
+	                    INNER JOIN PSTN PS
+	                         ON PA.PSTN_NO = PS.PSTN_NO 
+	                    INNER JOIN DPRTMNT DPRT
+	                         ON DPRT.DPRTMNT_NO = PA.DPRTMNT_NO	
+	WHERE C.CSTMR_NO = #{cstmrno}
+</select>
+
+<!-- 고객번호 seq가져오기  -->
+<select id="getCstmrNoSeq" parameterType="hashmap" resultType="string">
+	SELECT CSTMR_NO_SEQ.NEXTVAL
+	FROM DUAL
+</select>
+
+
+<!-- 고객등록시 담당자 배정  -->
+<insert id="AddCstmrMngr" parameterType="hashmap">
+INSERT INTO CSTMR_MNGR
+VALUES (#{CstmrNoSeq} ,#{sEmplyNo}, SYSDATE, NULL)
+
+</insert>
+<!-- 고객 상세 수정 -->
+<update id="DetailCSTMRupdate" parameterType="hashmap">
+	UPDATE CSTMR
+	SET CNTCT = #{cstmrcntct}, PSTN=#{cstmrpstn}, EMAIL=#{cstmremail},DPRTMNT=#{cstmrdprtmnt}, GRADE_NO = #{select_cstmrgrade} ,EMPLY_NO = #{emplyno2}
+	WHERE CSTMR_NO = #{cstmrno}
+</update>
+
+
+
+
+<!-- 고객 삭제 -->
+<update id="DetailCSTMRDel" parameterType="hashmap">
+		UPDATE CSTMR
+		SET DLT_YN=0
+		WHERE CSTMR_NO = #{cstmrno}
+		AND EMPLY_NO =#{EmplyNo}
+</update>
+
+
+<!-- 고객 수정 담당자 cnt조회 -->
+<select id="CstmrUpategetEmplyCnt" parameterType="hashmap" resultType="Integer">
+
+SELECT COUNT(*) AS CNT
+FROM(SELECT EM.EMPLY_NO, EM.EMPLY_NAME, DPRT.DPRTMNT_NAME, PS.PSTN_NAME
+		FROM EMPLY EM INNER JOIN PRSNL_APNTMNTS PA
+		                ON  EM.EMPLY_NO = PA.EMPLY_NO
+		              INNER JOIN PSTN PS
+		                ON PA.PSTN_NO = PS.PSTN_NO
+		              INNER JOIN DPRTMNT DPRT
+		              ON PA.DPRTMNT_NO = DPRT.DPRTMNT_NO
+		WHERE EM.EMPLY_NO != 1
+		<if test="search_Emply != null and search_Emply != '' ">
+			AND EM.EMPLY_NAME LIKE '%'||#{search_Emply}||'%'
+		</if>)
+</select>
+
+<!-- 고객 수정 담당자 List조회 -->
+<select id="CstmrUpdategetsearchEmplyList" parameterType="hashmap" resultType="hashmap">
+
+SELECT A.EMPLY_NO, A.EMPLY_NAME, A.DPRTMNT_NAME, A.PSTN_NAME
+FROM(SELECT EM.EMPLY_NO, EM.EMPLY_NAME, DPRT.DPRTMNT_NAME, PS.PSTN_NAME,
+    ROW_NUMBER() OVER(ORDER BY EM.EMPLY_NO DESC) AS RNUM
+FROM EMPLY EM INNER JOIN PRSNL_APNTMNTS PA
+                ON  EM.EMPLY_NO = PA.EMPLY_NO
+              INNER JOIN PSTN PS
+                ON PA.PSTN_NO = PS.PSTN_NO
+              INNER JOIN DPRTMNT DPRT
+              ON PA.DPRTMNT_NO = DPRT.DPRTMNT_NO
+WHERE EM.EMPLY_NO != 1
+<if test="search_Emply != null and search_Emply != '' ">
+					AND EM.EMPLY_NAME LIKE '%'||#{search_Emply}||'%'
+				</if>)A 
+WHERE A.RNUM BETWEEN #{startCnt} AND #{endCnt} 
+</select>
+
+<!-- 고객 수정 때 담당자도 변경될 경우 업데이트 -->
+<update id="getoutEmplyupdate" parameterType="hashmap">
+
+	UPDATE CSTMR_MNGR
+	SET DLT_DATE = SYSDATE - 1
+	WHERE CSTMR_NO = #{cstmrno}
+	AND DLT_DATE IS NULL
+
+</update>
+
+<!-- 고객 수정시 담당자 바뀐거 인서트 -->
+<insert id="getEmplyMngradd" parameterType="hashmap">
+	INSERT INTO CSTMR_MNGR
+	VALUES(#{cstmrno}, #{emplyno2}, SYSDATE, NULL)
+
+</insert>
+
+	<select id="bsnsSchdlMgmntCnt" parameterType="hashmap"
+		resultType="Integer">
+		SELECT count(*)
+		FROM cstmr_cmpny CC INNER JOIN cstmr_cmpny_grade CCG
+		ON cc.grade_no = ccg.grade_no
+		<if test="searchcc != null and searchcc != ''">
+			AND (
+			CC.CSTMR_CMPNY_NAME LIKE '%' || #{searchcc} ||'%'
+			<!-- OR CC.RPRSNTV LIKE '%' || #{searchcc} ||'%' -->
+			)
+		</if>
+
+	</select> <!-- 고객사 카운트 -->
+
+	<select id="cclist" parameterType="hashmap" resultType="hashmap">
+		SELECT CSTMR_CMPNY_NO, CSTMR_CMPNY_NAME, CRPRT_RGSTRTN_NO, RPRSNTV,
+		GRADE_NAME
+		FROM (
+		SELECT CC.CSTMR_CMPNY_NO, CC.CSTMR_CMPNY_NAME, CC.CRPRT_RGSTRTN_NO,
+		CC.RPRSNTV ,CCG.GRADE_NAME,
+		ROW_NUMBER() OVER(ORDER BY CC.CSTMR_CMPNY_NO DESC) AS RNUM
+		FROM CSTMR_CMPNY CC INNER JOIN CSTMR_CMPNY_GRADE CCG
+		ON CC.GRADE_NO = CCG.GRADE_NO
+
+		<if test="searchcc != null and searchcc != ''">
+			AND (
+			CC.CSTMR_CMPNY_NAME LIKE '%' || #{searchcc} ||'%'
+			)
+		</if>
+
+		) CC
+		WHERE CC.RNUM BETWEEN #{startCnt} AND #{endCnt}
+
+
+	</select><!--고객사 리스트 -->
+
+	<select id="bsnsSchdlMgmntCnt2" parameterType="hashmap" resultType="Integer">
+
+		SELECT COUNT(*)
+		FROM CSTMR C INNER JOIN CSTMR_CMPNY_GRADE CCG
+		ON C.GRADE_NO = CCG.GRADE_NO
+		WHERE C.CSTMR_CMPNY_NO = #{cstmr_cmpny_no}
+		AND C.DLT_YN = 1
+
+		<if test="searchc != null and searchc != ''">
+			AND (
+			C.CSTMR_NAME LIKE '%' || #{searchc} ||'%'
+			)
+		</if>
+
+	</select> <!-- 고객 카운트 -->
+
+	<select id="clist" parameterType="hashmap" resultType="hashmap">
+		<!-- SELECT CSTMR_NO, CSTMR_NAME, DPRTMNT, PSTN, CNTCT FROM CSTMR WHERE 
+			CSTMR_CMPNY_NO = #{cstmr_cmpny_no} AND DLT_YN = 1 -->
+		SELECT CSTMR_NO, CSTMR_NAME, DPRTMNT, PSTN, CNTCT
+		FROM CSTMR
+		WHERE CSTMR_CMPNY_NO = #{cstmr_cmpny_no}
+		AND DLT_YN = 1
+
+
+	</select><!-- 고객리스트 -->
+
+
+	<select id="getbsnsschdlcstmr" parameterType="hashmap"
+		resultType="String"><!-- 고객 시퀀스 등록 -->
+		SELECT SCHDL_NO_SEQ.NEXTVAL
+		FROM DUAL
+	</select>
+
+	<insert id="bsnsSchdlMgmntWrite" parameterType="hashmap"> <!-- 일정등록 -->
+		INSERT INTO SCHDL (SCHDL_NO, EMPLY_NO, SCHDL_NAME, CHNL_DVSN,
+		START_DATE, END_DATE, PLACE, IMPRTNC_TYPE, CNTNT, RGSTRTN_DATE,
+		DLT_TYPE )
+		VALUES( #{SCHDL_NO}, #{sEmplyNo}, #{schdl_name}, #{actvt_dvsn_no},
+		TO_DATE(#{start_date} || #{start_time}, 'YYYY-MM-DD HH24:MI'),
+		TO_DATE(#{end_date} || #{end_time}, 'YYYY-MM-DD HH24:MI'), #{place},
+		#{RPT_STNDR}, #{CNTNT}, SYSDATE, 1)
+	</insert>
+	<!-- #{SCHDL_NO} -->
+	<!-- SCHDL_cstmr_NO_SEQ.NEXTVAL -->
+	<insert id="bsnsSchdlMgmntWrite2" parameterType="hashmap"> <!-- 일정고객등록 -->
+		INSERT INTO schdl_CSTMR
+		VALUES ( SCHDL_CSTMR_NO_SEQ.NEXTVAL , #{SCHDL_NO}, #{cstmr_no2} )
+
+
+	</insert>
+
+
+<!-- 	<select id="bsnsSchdlMgmntCnt3" parameterType="hashmap"
+		resultType="Integer">
+
+
+		SELECT COUNT(*)
+		FROM SCHDL SC INNER JOIN EMPLY E
+		ON SC.EMPLY_NO = E.EMPLY_NO
+		INNER JOIN PRSNL_APNTMNTS PA
+		ON E.EMPLY_NO = PA.EMPLY_NO
+		AND PA.END_DAY IS NULL
+		INNER JOIN DPRTMNT D
+		ON PA.DPRTMNT_NO = D.DPRTMNT_NO
+		AND D.DPRTMNT_NO = 3
+		INNER JOIN PSTN P
+		ON PA.PSTN_NO = P.PSTN_NO
+		INNER JOIN CMN_CODE CD
+		ON SC.CHNL_DVSN = CD.MINOR_CODE
+		AND CD.MAJOR_CODE = 6
+		LEFT OUTER JOIN BSNS_SCHDL BS
+		ON SC.SCHDL_NO = BS.SCHDL_NO
+		LEFT OUTER JOIN SCHDL_CSTMR SCC
+		ON SC.SCHDL_NO = SCC.SCHDL_NO
+		LEFT OUTER JOIN CSTMR C
+		ON SCC.CSTMR_NO = C.CSTMR_NO
+		LEFT OUTER JOIN CSTMR_CMPNY CC
+		ON C.CSTMR_CMPNY_NO = CC.CSTMR_CMPNY_NO
+		WHERE SC.DLT_TYPE = 1
+		AND SYSDATE BETWEEN TO_CHAR(SC.START_DATE, 'YYYYMMDD') AND
+		TO_CHAR(SC.END_DATE, 'YYYYMMDD')
+		#{cal_sel_date}
+
+	</select> -->
+
+	<select id="redrawList" parameterType="hashmap"
+		resultType="hashmap">
+		SELECT CASE WHEN BS.ACTVT_DVSN_NO IS NULL
+		THEN 1 <!-- greed -->
+		WHEN BS.ACTVT_DVSN_NO IN (0, 1, 2)
+		THEN 2 <!-- blue -->
+		WHEN BS.ACTVT_DVSN_NO IN (3, 4)
+		THEN 3 <!-- red -->
+		END AS COLOR, TO_CHAR(SC.START_DATE, 'HH24:MI') AS START_TIME,
+		TO_CHAR(SC.END_DATE, 'HH24:MI') AS END_TIME, SC.PLACE, E.EMPLY_NAME,
+		P.PSTN_NAME, SC.SCHDL_NO, SC.SCHDL_NAME, CD.CODE_NAME,
+		TO_CHAR(SC.START_DATE, 'YYYYMMDD'), TO_CHAR(SC.END_DATE, 'YYYYMMDD')
+		FROM SCHDL SC INNER JOIN EMPLY E
+		ON SC.EMPLY_NO = E.EMPLY_NO
+		INNER JOIN PRSNL_APNTMNTS PA
+		ON E.EMPLY_NO = PA.EMPLY_NO
+		AND PA.END_DAY IS NULL
+		INNER JOIN DPRTMNT D
+		ON PA.DPRTMNT_NO = D.DPRTMNT_NO
+		AND D.DPRTMNT_NO = 3
+		INNER JOIN PSTN P
+		ON PA.PSTN_NO = P.PSTN_NO
+		INNER JOIN CMN_CODE CD
+		ON SC.CHNL_DVSN = CD.MINOR_CODE
+		AND CD.MAJOR_CODE = 6
+		LEFT OUTER JOIN BSNS_SCHDL BS
+		ON SC.SCHDL_NO = BS.SCHDL_NO
+		LEFT OUTER JOIN SCHDL_CSTMR SCC
+		ON SC.SCHDL_NO = SCC.SCHDL_NO
+		LEFT OUTER JOIN CSTMR C
+		ON SCC.CSTMR_NO = C.CSTMR_NO
+		LEFT OUTER JOIN CSTMR_CMPNY CC
+		ON C.CSTMR_CMPNY_NO = CC.CSTMR_CMPNY_NO
+		WHERE SC.DLT_TYPE = 1
+		AND SYSDATE BETWEEN TO_CHAR(SC.START_DATE, 'YYYYMMDD') AND
+		TO_CHAR(SC.END_DATE, 'YYYYMMDD')
+
+	</select>
+	<select id="infolist" parameterType="hashmap"
+		resultType="hashmap">
+		SELECT SC.SCHDL_NO, E.EMPLY_NAME, D.DPRTMNT_NAME , P.PSTN_NAME,
+		SC.SCHDL_NAME, CC.CSTMR_CMPNY_NAME,
+		C.CSTMR_NAME,CD.CODE_NAME,SC.PLACE,SC.IMPRTNC_TYPE,TO_CHAR(SC.START_DATE,
+		'YYYYMMDD') AS START_DATE, TO_CHAR(SC.START_DATE, 'HH24:MI') AS TIME,
+		SC.CNTNT, E.EMPLY_NO
+		FROM SCHDL SC INNER JOIN EMPLY E
+		ON SC.EMPLY_NO = E.EMPLY_NO
+		INNER JOIN PRSNL_APNTMNTS PA
+		ON E.EMPLY_NO = PA.EMPLY_NO
+		AND PA.END_DAY IS NULL
+		INNER JOIN DPRTMNT D
+		ON PA.DPRTMNT_NO = D.DPRTMNT_NO
+		AND D.DPRTMNT_NO = 3
+		INNER JOIN PSTN P
+		ON PA.PSTN_NO = P.PSTN_NO
+		INNER JOIN CMN_CODE CD
+		ON SC.CHNL_DVSN = CD.MINOR_CODE
+		AND CD.MAJOR_CODE = 6
+		LEFT OUTER JOIN BSNS_SCHDL BS
+		ON SC.SCHDL_NO = BS.SCHDL_NO
+		LEFT OUTER JOIN schdl_CSTMR SCC
+		ON SC.SCHDL_NO = SCC.SCHDL_NO
+		LEFT OUTER JOIN CSTMR C
+		ON SCC.CSTMR_NO = C.CSTMR_NO
+		LEFT OUTER JOIN CSTMR_CMPNY CC
+		ON C.CSTMR_CMPNY_NO = CC.CSTMR_CMPNY_NO
+		WHERE SC.DLT_TYPE = 1
+		AND SC.SCHDL_NO = #{schdl_no}
+	</select> <!-- 영업일정 리스트 셀렉트 -->
+
+	<select id="bsnsStsredrawPagingcnt" parameterType="hashmap"
+		resultType="Integer">
+		SELECT COUNT(*)
+		FROM CSTMR_CMPNY CC INNER JOIN EMPLY E
+		ON CC.EMPLY_NO = E.EMPLY_NO
+		WHERE CC.EMPLY_NO = E.EMPLY_NO
+		<if test="search != null and search != '' ">
+			<choose>
+				<when test="select == 0">
+					AND (LOWER( CSTMR_CMPNY_NAME) LIKE '%' || #{search}
+					||'%'
+					OR UPPER ( CSTMR_CMPNY_NAME) LIKE '%' || #{search} ||'%' )</when>
+
+				<when test="select == 1">
+					AND (LOWER( CSTMR_NAME) LIKE '%' || #{search} ||'%'
+					OR UPPER ( CSTMR_NAME) LIKE '%' || #{search} ||'%' )</when>
+			</choose>
+		</if>
+	</select> <!-- 현황카운트 -->
+
+<select id="callist" parameterType="hashmap" resultType="hashmap">
+SELECT SC.SCHDL_NO AS ID, SC.SCHDL_NAME AS TITLE, SC.START_DATE AS "START" , SC.END_DATE AS "END" 
+FROM SCHDL SC INNER JOIN EMPLY E ON SC.EMPLY_NO = E.EMPLY_NO 
+              INNER JOIN PRSNL_APNTMNTS PA ON E.EMPLY_NO = PA.EMPLY_NO AND PA.END_DAY IS NULL 
+              INNER JOIN DPRTMNT D ON PA.DPRTMNT_NO = D.DPRTMNT_NO AND D.DPRTMNT_NO = 3 
+              INNER JOIN PSTN P ON PA.PSTN_NO = P.PSTN_NO 
+              INNER JOIN CMN_CODE CD ON SC.CHNL_DVSN = CD.MINOR_CODE AND CD.MAJOR_CODE = 6 
+              LEFT OUTER JOIN BSNS_SCHDL BS ON SC.SCHDL_NO = BS.SCHDL_NO 
+              LEFT OUTER JOIN schdl_CSTMR SCC ON SC.SCHDL_NO = SCC.SCHDL_NO 
+              LEFT OUTER JOIN CSTMR C ON SCC.CSTMR_NO = C.CSTMR_NO 
+              LEFT OUTER JOIN CSTMR_CMPNY CC ON C.CSTMR_CMPNY_NO = CC.CSTMR_CMPNY_NO 
+WHERE SC.DLT_TYPE = 1
+</select><!-- 일정 바 찐 -->
+
+
+<update id="delSchdlUpdate" parameterType="hashmap">
+	UPDATE SCHDL
+	SET DLT_TYPE = 0
+	WHERE SCHDL_NO = #{schdl_no2}
+	AND EMPLY_NO = #{sEmplyNo}
+</update> <!-- 영업일정 삭제 업데이트 쿼리   sEmplyNo -->
+
+<update id="SchdlUpdate" parameterType="hashmap">
+UPDATE SCHDL
+SET 
+EMPLY_NO = #{sEmplyNo}, 
+SCHDL_NAME = #{schdl_name} , 
+CHNL_DVSN = #{actvt_dvsn_no},
+
+START_DATE = TO_DATE(#{start_date} || #{start_time}, 'YYYY-MM-DD HH24:MI'), 
+END_DATE = TO_DATE(#{end_date} || #{end_time}, 'YYYY-MM-DD HH24:MI')
+
+PLACE = #{place}, 
+
+CNTNT = #{CNTNT}, 
+
+		FROM SCHDL SC INNER JOIN EMPLY E 
+                        	ON SC.EMPLY_NO = E.EMPLY_NO
+		INNER JOIN PRSNL_APNTMNTS PA
+                        	ON E.EMPLY_NO = PA.EMPLY_NO
+                        	AND PA.END_DAY IS NULL
+		INNER JOIN DPRTMNT D 
+                            ON PA.DPRTMNT_NO = D.DPRTMNT_NO
+                        	AND D.DPRTMNT_NO = 3
+		INNER JOIN PSTN P 
+                            ON PA.PSTN_NO = P.PSTN_NO
+		INNER JOIN CMN_CODE CD
+                            ON SC.CHNL_DVSN = CD.MINOR_CODE
+                            AND CD.MAJOR_CODE = 6
+		LEFT OUTER JOIN BSNS_SCHDL BS
+                            ON SC.SCHDL_NO = BS.SCHDL_NO
+		LEFT OUTER JOIN schdl_CSTMR SCC
+                            ON SC.SCHDL_NO = SCC.SCHDL_NO
+		LEFT OUTER JOIN CSTMR C
+                            ON SCC.CSTMR_NO = C.CSTMR_NO
+		LEFT OUTER JOIN CSTMR_CMPNY CC
+                            ON C.CSTMR_CMPNY_NO = CC.CSTMR_CMPNY_NO
+		WHERE SCHDL_NO = #{schdl_no2}
+		AND SC.SCHDL_NO = #{sEmplyNo}
+        ;
+
+</update>
+
+
+
+	<select id="bsnsStslist" parameterType="hashmap"
+		resultType="hashmap">
+		SELECT CSTMR_CMPNY_NAME , "CHNC", "SGSTN", "NGTN", "ORDERS", "FAIL",
+		TOT, RNUM
+		FROM (
+		SELECT CC.CSTMR_CMPNY_NAME,
+		SUM(DECODE(NVL(B.BSNS_STATE, 0), 1, 1, 0)) AS "CHNC",
+		SUM(DECODE(NVL(B.BSNS_STATE, 0), 2, 1, 0)) AS "SGSTN",
+		SUM(DECODE(NVL(B.BSNS_STATE, 0), 3, 1, 0)) AS "NGTN",
+		SUM(DECODE(NVL(B.BSNS_STATE, 0), 4, 1, 0)) AS "ORDERS",
+		SUM(DECODE(NVL(B.BSNS_STATE, 0), 5, 1, 0)) AS "FAIL",
+		COUNT(B.BSNS_NO) AS TOT,
+		ROW_NUMBER() OVER(ORDER BY COUNT(B.BSNS_NO) DESC) AS RNUM
+		FROM CSTMR_CMPNY CC LEFT OUTER JOIN CSTMR C
+		ON CC.CSTMR_CMPNY_NO = C.CSTMR_CMPNY_NO
+		LEFT OUTER JOIN BSNS B
+		ON C.CSTMR_NO = B.CSTMR_NO
+		LEFT OUTER JOIN CSTMR_MNGR CM
+		ON C.CSTMR_NO = CM.CSTMR_NO
+		LEFT OUTER JOIN EMPLY E
+		ON CM.EMPLY_NO = E.EMPLY_NO
+		WHERE 1 = 1
+
+		<if test="search != null and search != '' ">
+			<choose>
+				<when test="select == 0">
+					AND (LOWER( CSTMR_CMPNY_NAME) LIKE '%' || #{search}
+					||'%'
+					OR UPPER ( CSTMR_CMPNY_NAME) LIKE '%' || #{search} ||'%' )</when>
+
+				<when test="select == 1">
+					AND (LOWER( CSTMR_NAME) LIKE '%' || #{search} ||'%'
+					OR UPPER ( CSTMR_NAME) LIKE '%' || #{search} ||'%' )</when>
+			</choose>
+		</if>
+		GROUP BY CC.CSTMR_CMPNY_NO, CSTMR_CMPNY_NAME
+		)
+
+		WHERE RNUM BETWEEN #{startCnt} AND #{endCnt}
+	</select> <!-- 영업현황리스트 -->
+
+	<select id="chart" parameterType="hashmap" resultType="hashmap">
+		SELECT CSTMR_CMPNY_NAME , "CHNC" AS DATA, "SGSTN" AS DATA2, "NGTN" AS
+		DATA3, "ORDERS" AS DATA4, "FAIL" AS DATA5, TOT AS DATA6, BSNS_NO
+		FROM (
+		SELECT CC.CSTMR_CMPNY_NAME, B.BSNS_NO,
+		SUM(DECODE(NVL(B.BSNS_STATE, 0), 1, 1, 0)) AS "CHNC",
+		SUM(DECODE(NVL(B.BSNS_STATE, 0), 2, 1, 0)) AS "SGSTN",
+		SUM(DECODE(NVL(B.BSNS_STATE, 0), 3, 1, 0)) AS "NGTN",
+		SUM(DECODE(NVL(B.BSNS_STATE, 0), 4, 1, 0)) AS "ORDERS",
+		SUM(DECODE(NVL(B.BSNS_STATE, 0), 5, 1, 0)) AS "FAIL",
+		COUNT(B.BSNS_NO) AS TOT
+
+		FROM CSTMR_CMPNY CC LEFT OUTER JOIN CSTMR C
+		ON CC.CSTMR_CMPNY_NO = C.CSTMR_CMPNY_NO
+		LEFT OUTER JOIN BSNS B
+		ON C.CSTMR_NO = B.CSTMR_NO
+		LEFT OUTER JOIN CSTMR_MNGR CM
+		ON C.CSTMR_NO = CM.CSTMR_NO
+		LEFT OUTER JOIN EMPLY E
+		ON CM.EMPLY_NO = E.EMPLY_NO
+		WHERE 1 = 1
+		<if test="search != null and search != '' ">
+			<choose>
+				<when test="select == 0">
+					AND (LOWER( CSTMR_CMPNY_NAME) LIKE '%' || #{search}
+					||'%'
+					OR UPPER ( CSTMR_CMPNY_NAME) LIKE '%' || #{search} ||'%' )</when>
+
+				<when test="select == 1">
+					AND (LOWER( CSTMR_NAME) LIKE '%' || #{search} ||'%'
+					OR UPPER ( CSTMR_NAME) LIKE '%' || #{search} ||'%' )</when>
+			</choose>
+		</if>
+
+		GROUP BY CC.CSTMR_CMPNY_NAME, B.BSNS_NO
+		)
+
+	</select>
+
+
+
+
+
+
+</mapper>

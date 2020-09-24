@@ -1,0 +1,256 @@
+@charset "UTF-8";
+
+tr{
+	font-weight: bold;
+}
+.calendar2, .pagingD {
+    width: 20px;
+    height: 20px;
+}
+.text1{
+	width : 230px;
+	height : 30px;
+}
+.text2{
+	with :200px;
+	height : 30px;
+}
+.text3{
+	width : 89%;
+	height : 30px;
+}
+.text4{
+	width : 650px;
+	height : 100px;
+}
+.text12{
+	display: table-cell;
+	text-align: left;
+	padding-left: 15px;
+	padding-right: 15px;
+	padding-top:5px;
+	padding-bottom:5px;
+	vertical-align:middle;
+	color: black;
+	width: 70%;
+ 	min-width: 230px;
+ 	max-width : 500px;
+	height: 70%;
+	min-height: 30px;
+	background-color: #7ABAF2;
+	border-radius: 15px;
+}
+.text13{
+	display: table-cell;
+	text-align: left;
+	text-indent: 15px;
+	vertical-align:middle;
+	color: black;
+	height : 30px;
+	background-color: white ;
+	border: 1px solid gray;
+	border-radius: 15px;
+	min-width:230px;
+	max-width:500px;
+}
+.popup {
+    background-color: white;
+    width: 900px;
+    height: 900px;
+    position: absolute;
+    top: calc(50% - 400px);
+    left: calc(50% - 300px);
+    box-shadow: 1px 0px 4px 0px rgba(0, 0, 0, 0.8);
+    z-index: 100;
+}
+thead, .blue {
+    background-color: #004078;
+    background: linear-gradient(#004B8D, #00305A);
+    /* color: white; */
+    /* height: 45px; */
+}
+td {
+/*     cursor: pointer; */
+    text-align: center;
+    border-bottom: 1px solid lightgray;
+   /*  border-left : 1px solid lightgray; */
+}
+.table2 td{
+	border-bottom: 1px solid lightgray;
+/*     cursor: pointer; */
+}
+.writeBtn {
+	width: 90px;
+	float: left;
+	margin-left: 20px;
+	margin-top: 12px;
+}
+
+.writeBtn:first-child {
+	margin-left: 19px;
+}
+
+
+.table1 td {
+	border-right: 1px solid lightgray;
+	border-left: 1px solid lightgray;
+	
+}
+.table {
+	margin-left : 20px;
+	
+	
+}
+/* .table1 tr:first-child td:last-child {
+	border-right: 0px;
+} */
+
+thead{
+	color: white;
+}
+.table2{
+	margin-top: 50px;
+}
+
+.ttop {
+	border-top: 1px solid lightgray;
+	border-right: 1px solid lightgray;
+}
+
+.chance{
+	position:relative;
+	top : 32px;
+	left : 26px;
+	font-size:initial;
+	width : 125px;
+	font-size :10pt;
+	height : 20px;
+}
+.dat1-1, .dat1-2, .dat1-3, .dat1-4, .dat1-5, .sizebottom_1 {
+ 	vertical-align:top;
+ 	display: inline-block;
+    padding-top: 4px;
+    font-size : 10pt;
+}
+.dat2{
+	text-align: right;
+	font-size : 10pt;
+}
+.size {
+    background-color: white;
+    border: 1px solid black;
+    height: 800px;
+    width: 865px;
+    margin-top: 80px;
+}
+.sizebottom{
+	width: 100%;
+	height: 100px;
+ 	background-color: #00305a;
+ 	background: linear-gradient(#004B8D, #00305A);
+}
+.sizebottom_1{
+ 	background-color:white;
+ 	display: inline-block;
+	vertical-align: top;
+	height: 60px;
+	width: 88%;
+	cursor:pointer;
+}
+.bottomsize_1{
+	display: inline-table;
+	vertical-align: top;
+	height: 70%;
+	width: 80px;
+	cursor:pointer;
+	text-align: center;
+}
+.bottomsize_2 {
+	display: table-cell;
+	vertical-align: middle;
+	font-size: 13pt;
+	color: white;
+	text-shadow: 1px 1px 1px gray;	
+}
+.dat_title{
+	text-align: center;
+	background: linear-gradient(#004B8D, #00305A);
+	color: white;
+	font-size: 18px;
+	border-bottom: 1px solid lightgray;
+}
+.con {
+	width: 100%;
+	height: calc(100% - 60px);
+}
+.inmu, .vkdlf{
+	background-repeat: no-repeat;
+	background-clip:padding-box;
+	border-radius: 15px;
+	width : 30px;
+	height : 30px;
+	margin-left: 5px;	 
+}
+.vkdlf{
+	background-color: white;
+
+}
+.p{
+	background: linear-gradient(#004B8D, #00305A);
+	color: white;
+}
+.ttop {
+	border-top: 1px solid lightgray;
+	border-right: 1px solid lightgray;
+}
+
+.cuga{
+	width: 25px;
+    height: 25px;
+    cursor: pointer;    
+}
+.ekdnsakreo,.djqakreo{
+	width: 30px;
+    height: 30px;
+}
+/* .cjaqntpqn,.cnrk{
+	display:inline-block;
+	vertical-align: top;
+}
+.cjaqntpqn,.cjaqndlalwl{
+	vertical-align: top;
+	display: inline-block;
+	
+} */
+.djqdosekdns{
+	width  :100%;
+	height : 20px;
+	background: linear-gradient(#7ABAF2, #4192D9);
+	border-radius: 15px;
+	margin-bottom: 30px;
+	margin-top:30px;
+	cursor: pointer;
+}
+.cjaqndlalwl,.djqdosekdns{
+	display:inline-block;
+	vertical-align: top;
+	
+
+	font-size:15px;
+}
+
+.paging {
+	width: 890px !important;
+}
+.pagingorder {
+	width: 890px !important;
+}
+.dlfwjd{
+	
+	margin-left : 20px;
+}
+.dlfwjd_1{
+	margin-top: 50px;
+	vertical-align: top;
+    display: inline-block;
+}

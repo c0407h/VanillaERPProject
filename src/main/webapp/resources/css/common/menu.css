@@ -1,0 +1,146 @@
+@charset "UTF-8";
+/* 
+	Menu Common CSS
+ */
+.menu1, .menu1_on, .menu3, .menu3_on {
+	/* background-color: #0074D9; */
+	/* background: linear-gradient(#0074D9, #004B8D); */
+	background: linear-gradient(#4192D9, #0074D9);
+	position: relative;
+	cursor: pointer;
+	box-shadow: 0px 1px 4px 0px rgba(0, 0, 0, 0.8);
+}
+.menu2, .menu2_on {
+	/* background-color: #7ABAF2; */
+	background: linear-gradient(#7ABAF2, #4192D9);
+	position: relative;
+	cursor: pointer;
+	box-shadow: 0px 1px 4px 0px rgba(0, 0, 0, 0.8);
+}
+
+.menu1_txt_bg, .menu2_txt_bg, .menu3_txt_bg {
+	position: absolute;
+	right: 0px;
+	/* background-color: #00305A; */
+	background: linear-gradient(#004B8D, #00305A);
+	box-shadow: -1px 0px 1px 0px rgba(0, 0, 0, 0.8);
+}
+
+.menu1 .menu1_txt, .menu2[next='true'] .menu2_txt {
+	background-image: url("../../images/common/right_arrow.png");
+	background-repeat: no-repeat;
+	background-position: 95% 50%;
+	background-size: 20px;
+}
+
+.menu1_on .menu1_txt, .menu2_on[next='true'] .menu2_txt {
+	background-image: url("../../images/common/down_arrow.png");
+	background-repeat: no-repeat;
+	background-position: 95% 50%;
+	background-size: 20px;
+}
+
+
+.menu1 > .menu1_txt_bg, .menu2 > .menu2_txt_bg, .menu3 > .menu3_txt_bg {
+	width: 250px;
+}
+
+.menu1_txt_wrap, .menu2_txt_wrap, .menu3_txt_wrap {
+	display: inline-block;
+	position: inherit;
+	top: 0px;
+	width: 250px;
+}
+
+.menu1_txt_table, .menu2_txt_table, .menu3_txt_table {
+	display: table;
+	width: 100%;
+	height: 100%;
+}
+
+.menu1_txt, .menu2_txt, .menu3_txt {
+	display: table-cell;
+	vertical-align: middle;
+	text-shadow: 1px 1px 2px grey;
+}
+
+/* 
+	1depth Menu CSS
+ */
+.menu1_txt_bg {
+	height: 50px;
+}
+
+.menu1_on > .menu1_txt_bg {
+	/* width: 240px; */
+	width: 0px;
+}
+
+.menu1_txt_wrap {
+	height: 50px;
+}
+
+.menu1_txt {
+	font-size: 14pt;
+	text-indent: 15px;
+	color: white;
+}
+
+/* 
+	2depth Menu CSS
+ */
+.menu1 > .menu2_wrap {
+	display: none;
+}
+
+.menu1_on > .menu2_wrap {
+	display: block;
+}
+
+.menu2_txt_bg {
+	height: 40px;
+}
+
+.menu2_on > .menu2_txt_bg {
+	/* width: 235px; */
+	width: 0px;
+}
+
+.menu2_txt_wrap {
+	height: 40px;
+}
+
+.menu2_txt {
+	font-size: 13pt;
+	text-indent: 20px;
+	color: white;
+}
+
+/* 
+	3depth Menu CSS
+ */
+.menu2 > .menu3_wrap {
+	display: none;
+}
+
+.menu2_on > .menu3_wrap {
+	display: block;
+}
+
+.menu3_txt_bg {
+	height: 30px;
+}
+
+.menu3_on > .menu3_txt_bg {
+	width: 230px;
+}
+
+.menu3_txt_wrap {
+	height: 30px;
+}
+
+.menu3_txt {
+	font-size: 10pt;
+	text-indent: 25px;
+	color: white;
+}

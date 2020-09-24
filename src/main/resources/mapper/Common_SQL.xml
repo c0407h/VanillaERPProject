@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="common">
+	<!-- 로그인 -->
+	<select id="loginCheck" parameterType="hashmap" resultType="hashmap">
+		SELECT E.EMPLY_NO, E.PHTGR, E.EMPLY_NAME, 
+			   E.ATHRTY_NO, D.DPRTMNT_NO, D.DPRTMNT_NAME, P.PSTN_NO, P.PSTN_NAME
+		FROM EMPLY E INNER JOIN PRSNL_APNTMNTS PA
+		                     ON E.EMPLY_NO = PA.EMPLY_NO
+		                    AND PA.END_DAY IS NULL
+		             INNER JOIN DPRTMNT D
+		                     ON PA.DPRTMNT_NO = D.DPRTMNT_NO
+		             INNER JOIN PSTN P
+		                     ON PA.PSTN_NO = P.PSTN_NO
+		WHERE E.EMAIL = #{email}
+		AND E.PSRD = #{psrd}
+	</select>
+	
+	<!-- 메뉴권한취득 -->
+	<select id="menuAthrtyCheck" parameterType="hashmap" resultType="String">
+		SELECT ATHRTY_TYPE
+		FROM MENU_ATHRTY
+		WHERE ATHRTY_NO = #{athrtyNo}
+		AND MENU_NO = #{menuNo}
+	</select>
+	
+	<!-- 메뉴취득 -->
+	<select id="getMenu" parameterType="hashmap" resultType="hashmap">
+		SELECT M.MENU_NO, M.MENU_NAME, M.TOP_MENU_NO, M.ADRS, M.MENU_LEVEL, M.CNT, M.MENU_FLOW
+		FROM (
+		SELECT M.MENU_NO, M.MENU_NAME, M.TOP_MENU_NO, M.ADRS, M.MENU_LEVEL, NVL(TM.CNT, 0) AS CNT,
+		       SUBSTR(SYS_CONNECT_BY_PATH(M.MENU_NO, ','), 2) AS MENU_FLOW
+		FROM MENU M INNER JOIN MENU_ATHRTY MA
+		                    ON M.MENU_NO = MA.MENU_NO
+		                   AND MA.ATHRTY_TYPE IN (1, 2)
+		                   AND MA.ATHRTY_NO = #{athrtyNo}
+		            LEFT OUTER JOIN (SELECT M.TOP_MENU_NO, COUNT(*) AS CNT
+		                             FROM MENU M INNER JOIN MENU_ATHRTY MA
+		                                                 ON M.MENU_NO = MA.MENU_NO
+		                                                AND MA.ATHRTY_TYPE IN (1, 2)
+		                                                AND MA.ATHRTY_NO = #{athrtyNo}
+		                             WHERE M.DLT_TYPE = 1
+		                             GROUP BY M.TOP_MENU_NO) TM
+		                         ON M.MENU_NO = TM.TOP_MENU_NO
+		WHERE M.DLT_TYPE = 1
+		START WITH M.MENU_LEVEL = 1
+		CONNECT BY PRIOR M.MENU_NO = M.TOP_MENU_NO) M
+	</select>
+	
+	<!-- 메뉴 게시판 목록 취득 -->
+	<select id="getBoardList" parameterType="hashmap" resultType="hashmap">
+		SELECT BOARD_NO, BOARD_NAME
+		FROM BOARD
+		WHERE BOARD_DLT_TYPE = 1
+		AND ((DPRTMNT_NO IS NULL AND PSTN_NO IS NULL)
+		     OR DPRTMNT_NO = #{dprtmntNo} OR PSTN_NO = #{pstnNo})
+		ORDER BY BOARD_SRT_NO ASC
+	</select>
+	
+	<!-- 공통코드 조회 Ajax용 -->
+	<select id="getCmnCodeAjax" parameterType="Integer" resultType="hashmap">
+		SELECT MINOR_CODE, CODE_NAME
+		FROM CMN_CODE
+		WHERE MAJOR_CODE = #{majorCode}
+		AND DLT_TYPE = 1
+		ORDER BY SORT ASC, MINOR_CODE ASC
+	</select>
+</mapper>

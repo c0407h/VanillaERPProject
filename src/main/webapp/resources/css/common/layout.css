@@ -1,0 +1,215 @@
+@charset "UTF-8";
+.middle_wrap {
+	height: calc(100% - 70px);
+	min-width: 1280px;
+	min-height: 600px;
+}
+
+.left_area, .right_area {
+	display: inline-block;
+	vertical-align: top;
+	height: 100%;
+}
+
+
+.left_area {
+	width: 250px;
+	background: linear-gradient(#004B8D, #00305A);
+	box-shadow: 1px 0px 1px 1px rgba(0, 0, 0, 0.8);
+	position: relative;
+	z-index: 15;
+}
+
+.right_area {
+	width: calc(100% - 250px);
+	min-width: 980px;
+}
+
+.right_area > .slimScrollDiv {
+	display: inline-block;
+	height: calc(100% - 60px) !important;
+	width: calc(100%) !important;
+	min-width: 1030px !important;
+}
+
+.contents_area {
+	height: calc(100% - 40px) !important;
+	width: calc(100% - 40px) !important;
+	padding: 20px 20px;
+	/* font-size: 14pt; */
+}
+
+/* 
+	Top Area CSS
+ */
+.top_area {
+	height: 70px;
+	/* background: linear-gradient(#7ABAF2, #4192D9); */
+	background: linear-gradient(#004B8D, #00305A);
+	box-shadow: 0px 1px 1px 1px rgba(0, 0, 0, 0.8);
+	position: relative;
+	z-index: 20;
+	min-width: 1280px;
+}
+
+/* 
+	Logo Area
+ */
+.logo_wrap {
+	display: inline-block;
+	vertical-align: top;
+	width: 250px;
+	height: 70px;
+	/* box-shadow: 1px 0px 1px 1px rgba(0, 0, 0, 0.8); */
+}
+
+.logo_table {
+	display: table;
+	width: 100%;
+	height: 100%;
+}
+
+
+.logo {
+	background-image: url("../../images/common/vlogo.png");
+	background-repeat: no-repeat;
+	background-size: 40px 40px;
+	background-position: 10% 35%;
+	
+	display: table-cell;
+	vertical-align: middle;
+	text-align: center;
+	font-size: 24pt;
+	font-weight: bold;
+	text-indent: 7px;
+	color: white;
+	text-shadow: 1px 1px 4px black;
+}
+
+/* 
+	GNB Area
+ */
+.gnb_wrap {
+	display: inline-block;
+	vertical-align: top;
+	width: calc(100% - 760px);
+	min-width: 520px;
+	height: 70px;
+	/* box-shadow: -1px 0px 1px 0px rgba(0, 0, 0, 0.8); */
+}
+
+.gnb_table {
+	display: table;
+	width: 100%;
+	height: 100%;
+}
+
+.gnb {
+	display: table-cell;
+	vertical-align: middle;
+	font-size: 10pt;
+	color: white;
+	text-indent: 10px;
+	text-shadow: 1px 1px 1px gray;
+}
+
+/* 
+	Information Area
+ */
+.info_wrap {
+	display: inline-block;
+	vertical-align: top;
+	width: 400px;
+	height: 70px;
+}
+
+.info_table {
+	display: table;
+	width: 100%;
+	height: 100%;
+}
+
+.info {
+	display: table-cell;
+	vertical-align: middle;
+	font-size: 10pt;
+	color: white;
+	text-align: right;
+	text-indent: 10px;
+	text-shadow: 1px 1px 1px gray;
+}
+
+.info > .user_photo {
+	display: inline-block;
+	vertical-align: middle;
+	width: 50px;
+	height: 50px;
+	border-radius: 5px;
+}
+
+.info > .info_txt {
+	display: inline-block;
+	vertical-align: middle;
+}
+
+/* 
+	Information Area
+ */
+.opt_btn_wrap {
+	display: inline-block;
+	vertical-align: top;
+	width: 110px;
+	height: 70px;
+}
+
+.opt_btn_table {
+	display: table;
+	width: 100%;
+	height: 100%;
+}
+
+.opt_btn {
+	display: table-cell;
+	vertical-align: middle;
+	text-align: center;
+}
+
+.opt_btn > .config_btn, .opt_btn > .logoff_btn {
+	display: inline-block;
+	vertical-align: middle;
+	width: 40px;
+	height: 40px;
+	cursor: pointer;
+}
+
+.opt_btn > .config_btn {
+	margin-right: 10px;
+}
+
+/* 
+	Title Area
+ */
+.title_wrap {
+	position: relative;
+	z-index: 10;
+	height: 60px;
+	box-shadow: -1px 0px 1px 0px rgba(0, 0, 0, 0.8);
+}
+
+.title_table {
+	display: table;
+	width: 100%;
+	height: 100%;
+}
+
+.title_txt {
+	display: table-cell;
+	vertical-align: middle;
+	font-size: 14pt;
+	text-indent: 35px;
+	text-shadow: 1px 1px 1px gray;
+	background-image: url("../../images/common/title_header.png");
+	background-repeat: no-repeat;
+	background-position: 10px 50%;
+	background-size: 20px;
+}

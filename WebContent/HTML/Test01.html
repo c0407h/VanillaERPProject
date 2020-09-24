@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<script type="text/javascript">
+//  txt라는 변수를 만들어주고  body에 있는 id가 txt인 요소들을 txt라는 변수에 담아줌 
+//  만약 txt라는 변수의 값이 0과 같다면 obj의 값(숫자)들을 txt의 값에 넣어줌 
+//  txt의 값이 0이 아니라면 txt변수 값에 obj값들을 누적시킴. 
+function Num(obj){
+	var txt = document.getElementById("txt"); 
+	var val2 = document.getElementById("result_value");
+		if(txt.value == 0){
+			txt.value = obj.value;
+						val2.value = txt.value*1;
+		}else{
+			txt.value += obj.value;
+						val2.value = txt.value*1;
+		}
+}
+//각각의 연산 버튼을 눌렀을때 
+function mark(obj){
+	var txt = document.getElementById("txt"); 
+	var mark = document.getElementById("mark");
+	var val = document.getElementById("result");
+	var val2 = document.getElementById("result_value");
+			if(mark.value == 0){
+				val.value = txt.value*1;
+				val2.value = txt.value*1;
+				mark.value = obj.value;
+				txt.value = 0;
+			}else{
+				switch(mark.value){
+				case "+":
+						val2.value = txt.value*1;
+						val.value = val.value*1 + txt.value*1;
+						mark.value = obj.value;
+						txt.value =0 ;
+					break;
+				case "-":
+						val2.value = txt.value*1;
+						val.value = val.value*1 - txt.value*1;
+						mark.value = obj.value;
+						txt.value =0 ;
+					break;
+				case "*":
+						if(txt.value == 0){
+							val.value = val.value;
+							mark.value = obj.value;
+							txt.value = 0 ;
+						}else{
+						val2.value = txt.value*1;
+						val.value = val.value*1 * txt.value*1;
+						mark.value = obj.value;
+						txt.value = 0 ;
+							
+						}
+					break;
+				case "/":
+						if(txt.value == 0){
+							val.value = val.value;
+							mark.value = obj.value;
+							txt.value = 0 ;
+						}else{
+						val2.value = txt.value*1;
+						val.value = val.value*1 / txt.value*1;
+						mark.value = obj.value;
+						txt.value = 0 ;
+							
+						}
+					break;
+				}
+			}
+} 
+//클리어버튼을 눌렀을때;
+function Clear(){
+	var txt = document.getElementById("txt"); 
+	var mark = document.getElementById("mark");
+	var val = document.getElementById("result");
+	var val2 = document.getElementById("result_value");
+	val2.value = 0;
+	val.value = 0;
+	mark.value = 0;
+	txt.value = 0;
+}
+// = 버튼을 눌렀을때
+function Eq(){
+	var txt = document.getElementById("txt"); 
+	var mark = document.getElementById("mark");
+	var val = document.getElementById("result");
+	var val2 = document.getElementById("result_value");
+		if(mark.value == 0){
+			val.value = val2.value;
+			txt.value = 0;
+		}else{
+				switch(mark.value){
+				case "+":
+						val.value = val.value*1 + val2.value*1;
+						txt.value =0 ;
+					break;
+				case "-":
+						val.value = val.value*1 - val2.value*1;
+						txt.value =0 ;
+					break;
+				case "*":
+						val.value = val.value*1 * val2.value*1;
+						txt.value =0 ;
+					break;
+				case "/":
+						val.value = val.value*1 / val2.value*1;
+						txt.value = 0 ;
+					break;
+				}
+		}
+}
+// 닷 . 소수만드
+function comma(){
+	var txt = document.getElementById("txt"); 
+	var val2 = document.getElementById("result_value");
+	var val = document.getElementById("result");
+			
+		 val2.value = txt.value ;
+		 txt.value = val2.value*1 + '.';
+		 
+}
+// +-만들어주기
+function pusmi(){
+	var pusmi = document.getElementById("pusmi");
+	var txt = document.getElementById("txt"); 
+	var val2 = document.getElementById("result_value");
+	var val = document.getElementById("result");
+		if(pusmi.value == 0){
+			txt.value = '-' + txt.value*1;
+			pusmi.value = '-';
+		}else if(pusmi.value != 0){
+			txt.value = '+' + txt.value*1;
+			pusmi.value = '0';
+		}
+		
+		
+	
+	
+}
+
+// %만들어주기
+function percent(){
+	var txt = document.getElementById("txt"); 
+	var val = document.getElementById("result");
+	var val2 = document.getElementById("result_value");
+	var per = document.getElementById("percent")
+		if(per.value == 0){
+		val2.value = val2.value / 100;
+		val.value = val2.value;
+		}
+		}
+</script>
+<style type="text/css">
+.all{
+	display:inline-block;
+	background-color: black;
+	width : 500px;
+	height : 800px;
+	border : 1px solid #FFFFFF;
+	margin: 0px auto;
+}
+#txt{
+	color : white;
+	background-color: black;
+	text-align: right;
+	width :480px;
+	height: 50px;
+	font-size:45px;
+	border:none;
+	
+}
+#result{
+	border:none;
+	color : white;
+	background-color: black;
+	text-align: right;
+	width :480px;
+	height: 50px;
+	font-size:45px;
+}
+.but{
+	border:none;
+ display: inline-block;
+ width:120px;
+ height: 120px;
+ background-color : #4C4C4C;
+ color:white;
+ font-size: 80px;
+ border-radius: 90px;
+}
+.zero{
+
+	border:none;
+ display: inline-block;
+ width:240px;
+ height: 120px;
+ background-color : #4C4C4C;
+ color:white;
+ font-size: 80px;
+ border-radius: 90px;
+ text-align: left;
+}
+
+.func{
+	border:none;
+ display: inline-block;
+ width:120px;
+ height: 120px;
+ background-color : orange;
+ color:white;
+ font-size: 80px;
+ border-radius: 90px;
+ }
+.func2{
+
+ display: inline-block;
+ width:120px;
+ height: 120px;
+ background-color : gray;
+ color:white;
+ font-size: 80px;
+ border-radius: 90px;
+	border:none;
+}
+</style>
+
+
+</head>
+<body>
+<div class="all">
+
+<input type="hidden" id="comtxt" value="0" readonly= "readonly"/>
+<input type="hidden" id="percent" value="0" readonly= "readonly"/>
+<input type="hidden" id="pusmi" value="0" readonly= "readonly"/>
+<input type="hidden" id="comma" value="0" readonly= "readonly"/>
+<input type="hidden" id="mark" value="0" readonly= "readonly"/>
+<input type="text" id="result" value="0" readonly= "readonly"/>
+<br/>
+<input type="text" id="result_value" value="0" readonly="readonly"/>
+<input type="text" id="txt" value="0" readonly="readonly"/>
+<br/>
+<input type="button" class="func2" value="C" onclick="Clear();"/>
+<input type="button" class="func2" value="+/-" onclick="pusmi();"/>
+<input type="button" class="func2" value="%" onclick="percent();"/>
+<input type="button" class="func" value="/" onclick="mark(this);"/>
+<br/>
+<br/>
+<input type="button" class="but" value="7" onclick="Num(this);"/>
+<input type="button" class="but" value="8" onclick="Num(this);"/>
+<input type="button" class="but" value="9" onclick="Num(this);"/>
+<input type="button" class="func" value="*" onclick="mark(this);"/>
+<br/>
+<br/>
+<input type="button" class="but" value="4" onclick="Num(this);"/>
+<input type="button" class="but" value="5" onclick="Num(this);"/>
+<input type="button" class="but" value="6" onclick="Num(this);"/>
+<input type="button" class="func" value="-" onclick="mark(this);"/>
+<br/>
+<br/>
+<input type="button" class="but" value="1" onclick="Num(this);"/>
+<input type="button" class="but" value="2" onclick="Num(this);"/>
+<input type="button" class="but" value="3" onclick="Num(this);"/>
+<input type="button" class="func" value="+" onclick="mark(this);"/>
+<br/>
+<br/>
+<input type="button" class="zero" value="0" onclick="Num(this);"/>
+<input type="button" class="but" value="." onclick="comma();"/>
+<input type="button" class="func" value="=" onclick="Eq();"/>
+</div>
+</body>
+</html>
